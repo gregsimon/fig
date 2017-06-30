@@ -49,9 +49,23 @@ void MainContentComponent::menuItemSelected(int menuItemID)
   case FILE_Open: 
     do_fileopen();
     break;
+  case FILE_Exit:
+    JUCEApplication::getInstance()->perform(ApplicationCommandTarget::InvocationInfo(StandardApplicationCommandIDs::quit));
+    break;
   }
 }
 
 void MainContentComponent::do_fileopen() {
 
+  int flags = FileBrowserComponent::openMode | FileBrowserComponent::canSelectFiles;
+  WildcardFileFilter wildcard("*.*", "*", String());
+  String startingFile;
+  
+  FileBrowserComponent browserComponent(flags, startingFile, &wildcard, nullptr);
+
+  FileChooserDialogBox dialog("Open", String(),
+    browserComponent, false, browserComponent.findColour(AlertWindow::backgroundColourId));
+  if (dialog.show()) {
+
+  }
 }

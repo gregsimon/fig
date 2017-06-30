@@ -43,9 +43,11 @@ public:
       m.addItem(FILE_SaveAs, "Save As...", true);
       m.addSeparator();
       m.addItem(FILE_Exit, "Exit", true);
-      return m;
+      break;
 
     }
+
+    return m;
   }
   virtual void 	menuItemSelected(int menuItemID, int /*topLevelMenuIndex*/) override {
     _listeners.call(&Listener::menuItemSelected, menuItemID);
