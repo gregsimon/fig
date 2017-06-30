@@ -6,6 +6,7 @@
               jucerVersion="5.0.2">
   <MAINGROUP id="lajgul" name="Gooey">
     <GROUP id="{43400221-949D-1E05-4F19-06BCA9DA3D1E}" name="Source">
+      <FILE id="f60820" name="MenuModels.h" compile="0" resource="0" file="Source/MenuModels.h"/>
       <FILE id="izAQF9" name="MainComponent.cpp" compile="1" resource="0"
             file="Source/MainComponent.cpp"/>
       <FILE id="O566sS" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
@@ -25,13 +26,6 @@
         <MODULEPATH id="juce_data_structures" path="../../juce-huckleberry-windows/JUCE/modules"/>
         <MODULEPATH id="juce_gui_basics" path="../../juce-huckleberry-windows/JUCE/modules"/>
         <MODULEPATH id="juce_gui_extra" path="../../juce-huckleberry-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_cryptography" path="../../juce-huckleberry-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_video" path="../../juce-huckleberry-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_opengl" path="../../juce-huckleberry-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_basics" path="../../juce-huckleberry-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_devices" path="../../juce-huckleberry-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_formats" path="../../juce-huckleberry-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_processors" path="../../juce-huckleberry-windows/JUCE/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
     <VS2017 targetFolder="Builds/VisualStudio2017">
@@ -48,13 +42,6 @@
         <MODULEPATH id="juce_data_structures" path="../../juce-huckleberry-windows/JUCE/modules"/>
         <MODULEPATH id="juce_gui_basics" path="../../juce-huckleberry-windows/JUCE/modules"/>
         <MODULEPATH id="juce_gui_extra" path="../../juce-huckleberry-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_cryptography" path="../../juce-huckleberry-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_video" path="../../juce-huckleberry-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_opengl" path="../../juce-huckleberry-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_basics" path="../../juce-huckleberry-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_devices" path="../../juce-huckleberry-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_formats" path="../../juce-huckleberry-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_processors" path="../../juce-huckleberry-windows/JUCE/modules"/>
       </MODULEPATHS>
     </VS2017>
     <LINUX_MAKE targetFolder="Builds/LinuxMakefile">
@@ -69,30 +56,16 @@
         <MODULEPATH id="juce_data_structures" path="../../juce-huckleberry-windows/JUCE/modules"/>
         <MODULEPATH id="juce_gui_basics" path="../../juce-huckleberry-windows/JUCE/modules"/>
         <MODULEPATH id="juce_gui_extra" path="../../juce-huckleberry-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_cryptography" path="../../juce-huckleberry-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_video" path="../../juce-huckleberry-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_opengl" path="../../juce-huckleberry-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_basics" path="../../juce-huckleberry-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_devices" path="../../juce-huckleberry-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_formats" path="../../juce-huckleberry-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_processors" path="../../juce-huckleberry-windows/JUCE/modules"/>
       </MODULEPATHS>
     </LINUX_MAKE>
   </EXPORTFORMATS>
   <MODULES>
-    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0"/>
-    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0"/>
-    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0"/>
-    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0"/>
     <MODULE id="juce_core" showAllCode="1" useLocalCopy="0"/>
-    <MODULE id="juce_cryptography" showAllCode="1" useLocalCopy="0"/>
     <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0"/>
     <MODULE id="juce_events" showAllCode="1" useLocalCopy="0"/>
     <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0"/>
     <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0"/>
     <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0"/>
-    <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="0"/>
-    <MODULE id="juce_video" showAllCode="1" useLocalCopy="0"/>
   </MODULES>
   <JUCEOPTIONS/>
 </JUCERPROJECT>

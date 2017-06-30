@@ -1,37 +1,57 @@
-/*
-  ==============================================================================
-
-    This file was auto-generated!
-
-  ==============================================================================
-*/
-
 #include "MainComponent.h"
 
 
-//==============================================================================
-MainContentComponent::MainContentComponent()
+
+
+MainContentComponent::MainContentComponent()  
 {
-    setSize (600, 400);
+  _codeDocument = new CodeDocument();
+  _editor = new CodeEditorComponent(*_codeDocument, nullptr);
+  addAndMakeVisible(_editor);
+
+  _model = new MainMenuModel();
+  _model->addListener(this);
+  _menu.setModel(_model);
+  addAndMakeVisible(&_menu);
+
+  setSize(1024, 768);
 }
 
 MainContentComponent::~MainContentComponent()
 {
+  _menu.setModel(nullptr);
+  
+  // order here matters:
+  delete _editor;
+  delete _codeDocument;
 }
 
 void MainContentComponent::paint (Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
+  /*
+  g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
 
-    g.setFont (Font (16.0f));
-    g.setColour (Colours::white);
-    g.drawText ("Hello World!", getLocalBounds(), Justification::centred, true);
+  g.setFont (Font (16.0f));
+  g.setColour (Colours::white);
+  g.drawText ("Hello World!", getLocalBounds(), Justification::centred, true);
+  */
 }
 
 void MainContentComponent::resized()
 {
-    // This is called when the MainContentComponent is resized.
-    // If you add any child components, this is where you should
-    // update their positions.
+  _menu.setBounds(0, 0, getWidth(), 24);
+  _editor->setBounds(0, 24, getWidth(), getHeight());
+}
+
+void MainContentComponent::menuItemSelected(int menuItemID)
+{
+  switch (menuItemID) {
+  case FILE_Open: 
+    do_fileopen();
+    break;
+  }
+}
+
+void MainContentComponent::do_fileopen() {
+
 }
