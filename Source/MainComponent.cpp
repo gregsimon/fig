@@ -8,7 +8,17 @@ MainContentComponent::MainContentComponent()
 {
   _codeDocument = new CodeDocument();
   _editor = new CodeEditorComponent(*_codeDocument, nullptr);
+  _editor->setTabSize(2, true);
   addAndMakeVisible(_editor);
+
+  // load the font
+  int dataSize = 0;
+  const char* data = BinaryData::getNamedResource("InconsolataRegular_ttf", dataSize);
+  Typeface::Ptr font_data = Typeface::createSystemTypefaceFor(data, dataSize);
+  _editorFont = new Font(font_data);
+  _editorFont->setHeight(20.0f);
+  _editor->setFont(*_editorFont);
+  
 
   _model = new MainMenuModel();
   _model->addListener(this);

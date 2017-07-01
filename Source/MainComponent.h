@@ -19,6 +19,8 @@ public:
 private:
   CodeEditorComponent* _editor;
   CodeDocument* _codeDocument;
+
+  ScopedPointer<Font> _editorFont;
   
   MenuBarComponent _menu;
   ScopedPointer<MainMenuModel> _model;

@@ -6,6 +6,10 @@
               jucerVersion="5.0.2">
   <MAINGROUP id="lajgul" name="Gooey">
     <GROUP id="{43400221-949D-1E05-4F19-06BCA9DA3D1E}" name="Source">
+      <GROUP id="{F588E20D-136A-FD49-C2E4-2F34DC7DF488}" name="fonts">
+        <FILE id="Kv6wpq" name="Inconsolata-Regular.ttf" compile="0" resource="1"
+              file="fonts/Inconsolata-Regular.ttf"/>
+      </GROUP>
       <FILE id="f60820" name="MenuModels.h" compile="0" resource="0" file="Source/MenuModels.h"/>
       <FILE id="izAQF9" name="MainComponent.cpp" compile="1" resource="0"
             file="Source/MainComponent.cpp"/>
