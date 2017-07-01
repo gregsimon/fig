@@ -3,7 +3,8 @@
 
 
 
-MainContentComponent::MainContentComponent()  
+MainContentComponent::MainContentComponent()
+: _tabs( TabbedButtonBar::Orientation::TabsAtTop)
 {
   _codeDocument = new CodeDocument();
   _editor = new CodeEditorComponent(*_codeDocument, nullptr);
@@ -16,6 +17,10 @@ MainContentComponent::MainContentComponent()
 #endif
   _menu.setModel(_model);
   addAndMakeVisible(&_menu);
+  
+  addAndMakeVisible(&_tabs);
+  _tabs.addTab("main.cc", Colour(90, 90, 255), 0);
+  //_tabs.addTab("foo.h", Colour(255, 0, 0), 0);
 
   setSize(1024, 768);
 }
@@ -45,8 +50,9 @@ void MainContentComponent::paint (Graphics& g)
 
 void MainContentComponent::resized()
 {
-    _menu.setBounds(0, 0, getWidth(), 24);
-    _editor->setBounds(0, 24, getWidth(), getHeight());
+  _menu.setBounds(0, 0, getWidth(), 24);
+  _tabs.setBounds(0, 24, getWidth(), 24);
+  _editor->setBounds(0, 48, getWidth(), getHeight());
 }
 
 void MainContentComponent::menuItemSelected(int menuItemID)
@@ -73,6 +79,7 @@ void MainContentComponent::do_fileopen()
       File file (myChooser.getResult());
       String contents = file.loadFileAsString();
       _codeDocument->replaceAllContent(contents);
+      _tabs.setTabName(0, file.getFileName());
     }
 #else
   int flags = FileBrowserComponent::openMode | FileBrowserComponent::canSelectFiles;
