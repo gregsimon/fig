@@ -11,6 +11,9 @@ MainContentComponent::MainContentComponent()
 
   _model = new MainMenuModel();
   _model->addListener(this);
+#if JUCE_MAC
+    MenuBarModel::setMacMainMenu(_model);
+#endif
   _menu.setModel(_model);
   addAndMakeVisible(&_menu);
 
@@ -20,6 +23,9 @@ MainContentComponent::MainContentComponent()
 MainContentComponent::~MainContentComponent()
 {
   _menu.setModel(nullptr);
+#if JUCE_MAC
+  MenuBarModel::setMacMainMenu(nullptr);
+#endif
   
   // order here matters:
   delete _editor;
@@ -39,8 +45,8 @@ void MainContentComponent::paint (Graphics& g)
 
 void MainContentComponent::resized()
 {
-  _menu.setBounds(0, 0, getWidth(), 24);
-  _editor->setBounds(0, 24, getWidth(), getHeight());
+    _menu.setBounds(0, 0, getWidth(), 24);
+    _editor->setBounds(0, 24, getWidth(), getHeight());
 }
 
 void MainContentComponent::menuItemSelected(int menuItemID)
@@ -50,13 +56,25 @@ void MainContentComponent::menuItemSelected(int menuItemID)
     do_fileopen();
     break;
   case FILE_Exit:
+      _menu.setModel(nullptr);
     JUCEApplication::getInstance()->perform(ApplicationCommandTarget::InvocationInfo(StandardApplicationCommandIDs::quit));
     break;
   }
 }
 
-void MainContentComponent::do_fileopen() {
-
+void MainContentComponent::do_fileopen()
+{
+#if JUCE_MAC
+    FileChooser myChooser ("Select a file to open...",
+                           File::getSpecialLocation (File::userHomeDirectory),
+                           "*");
+    if (myChooser.browseForFileToOpen())
+    {
+      File file (myChooser.getResult());
+      String contents = file.loadFileAsString();
+      _codeDocument->replaceAllContent(contents);
+    }
+#else
   int flags = FileBrowserComponent::openMode | FileBrowserComponent::canSelectFiles;
   WildcardFileFilter wildcard("*.*", "*", String());
   String startingFile;
@@ -66,6 +84,7 @@ void MainContentComponent::do_fileopen() {
   FileChooserDialogBox dialog("Open", String(),
     browserComponent, false, browserComponent.findColour(AlertWindow::backgroundColourId));
   if (dialog.show()) {
-
+    File file = browserComponent.getSelectedFile();
   }
+#endif
 }
