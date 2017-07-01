@@ -24,6 +24,15 @@ public:
 private:
   struct OpenDocument {
     OpenDocument(const File& f) : file(f), tokenizer(nullptr) {
+
+      String ext = f.getFileExtension();
+      if (ext == ".cc" || ext == ".cpp" || ext == ".h" || ext == ".c")
+        tokenizer = new CPlusPlusCodeTokeniser;
+      else if (ext == ".lua")
+        tokenizer = new LuaTokeniser;
+      else if (ext == ".xml")
+        tokenizer = new 	XmlTokeniser;
+
       code_document = new CodeDocument;
       editor = new CodeEditorComponent(*code_document, tokenizer);
       String contents = f.loadFileAsString();
@@ -33,11 +42,10 @@ private:
     ~OpenDocument() {
       delete editor;
       delete code_document;
-      delete tokenizer;
     }
 
     File file;
-    CodeTokeniser* tokenizer;
+    ScopedPointer<CodeTokeniser> tokenizer;
     CodeEditorComponent* editor;
     CodeDocument* code_document;
   };
