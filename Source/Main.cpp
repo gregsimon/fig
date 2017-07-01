@@ -70,6 +70,7 @@ public:
             setContentOwned (new MainContentComponent(), true);
 
             centreWithSize (getWidth(), getHeight());
+            setResizable(true, true);
             setVisible (true);
         }
 

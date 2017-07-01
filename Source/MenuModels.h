@@ -4,6 +4,7 @@
 enum MenuIds {
   FILE_New = 10,
   FILE_Open,
+  FILE_Close,
   FILE_Save,
   FILE_SaveAs,
   FILE_Exit
@@ -38,6 +39,7 @@ public:
       // File
       m.addItem(FILE_New, "New...", true);
       m.addItem(FILE_Open, "Open...", true);
+      m.addItem(FILE_Close, "Close", true);
       m.addSeparator();
       m.addItem(FILE_Save, "Save", true);
       m.addItem(FILE_SaveAs, "Save As...", true);

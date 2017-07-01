@@ -6,20 +6,17 @@
 MainContentComponent::MainContentComponent()
 : _tabs( TabbedButtonBar::Orientation::TabsAtTop)
 {
-  _codeDocument = new CodeDocument();
-  _editor = new CodeEditorComponent(*_codeDocument, nullptr);
-  _editor->setTabSize(2, true);
-  addAndMakeVisible(_editor);
-
   // load the font
   int dataSize = 0;
   const char* data = BinaryData::getNamedResource("InconsolataRegular_ttf", dataSize);
   Typeface::Ptr font_data = Typeface::createSystemTypefaceFor(data, dataSize);
   _editorFont = new Font(font_data);
   _editorFont->setHeight(20.0f);
-  _editor->setFont(*_editorFont);
-  
 
+  // set up commands
+  // TODO
+  
+  // setup menus
   _model = new MainMenuModel();
   _model->addListener(this);
 #if JUCE_MAC
@@ -28,9 +25,9 @@ MainContentComponent::MainContentComponent()
   _menu.setModel(_model);
   addAndMakeVisible(&_menu);
   
+  // tabs
   addAndMakeVisible(&_tabs);
-  _tabs.addTab("main.cc", Colour(90, 90, 255), 0);
-  //_tabs.addTab("foo.h", Colour(255, 0, 0), 0);
+
 
   setSize(1024, 768);
 }
@@ -41,28 +38,20 @@ MainContentComponent::~MainContentComponent()
 #if JUCE_MAC
   MenuBarModel::setMacMainMenu(nullptr);
 #endif
-  
-  // order here matters:
-  delete _editor;
-  delete _codeDocument;
+
+  for (std::list<OpenDocument*>::iterator it = _opendocs.begin(); it != _opendocs.end(); ++it) {
+    delete (*it);
+  }
 }
 
 void MainContentComponent::paint (Graphics& )
 {
-  /*
-  g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
-
-  g.setFont (Font (16.0f));
-  g.setColour (Colours::white);
-  g.drawText ("Hello World!", getLocalBounds(), Justification::centred, true);
-  */
 }
 
 void MainContentComponent::resized()
 {
   _menu.setBounds(0, 0, getWidth(), 24);
-  _tabs.setBounds(0, 24, getWidth(), 24);
-  _editor->setBounds(0, 48, getWidth(), getHeight());
+  _tabs.setBounds(0, 24, getWidth(), getHeight()-48);
 }
 
 void MainContentComponent::menuItemSelected(int menuItemID)
@@ -71,10 +60,42 @@ void MainContentComponent::menuItemSelected(int menuItemID)
   case FILE_Open: 
     do_fileopen();
     break;
+  case FILE_Close:
+    do_fileclose();
+    break;
   case FILE_Exit:
       _menu.setModel(nullptr);
     JUCEApplication::getInstance()->perform(ApplicationCommandTarget::InvocationInfo(StandardApplicationCommandIDs::quit));
     break;
+  }
+}
+
+void MainContentComponent::changeListenerCallback(ChangeBroadcaster *)
+{
+}
+
+void MainContentComponent::add_document(const File& file)
+{
+  OpenDocument* doc = new OpenDocument(file);
+  _opendocs.push_back(doc);
+  
+  doc->editor->setFont(*_editorFont);
+  _tabs.addTab(file.getFileName(), Colour(66, 67, 65), doc->editor, false);
+  resized();
+}
+
+void MainContentComponent::do_fileclose()
+{
+  int index = _tabs.getCurrentTabIndex();
+  if (index < 0)
+    return;
+  for (OpenDocsList::iterator it = _opendocs.begin(); it != _opendocs.end(); ++it) {
+    if ((*it)->editor == _tabs.getTabContentComponent(index)) {
+      _tabs.removeTab(index);
+      delete (*it);
+      _opendocs.erase(it);
+      break;
+    }
   }
 }
 
@@ -101,10 +122,7 @@ void MainContentComponent::do_fileopen()
   FileChooserDialogBox dialog("Open", String(),
     browserComponent, false, browserComponent.findColour(AlertWindow::backgroundColourId));
   if (dialog.show()) {
-    File file = browserComponent.getSelectedFile(0);
-    String contents = file.loadFileAsString();
-    _codeDocument->replaceAllContent(contents);
-    _tabs.setTabName(0, file.getFileName());
+    add_document(browserComponent.getSelectedFile(0));
   }
 #endif
 }
