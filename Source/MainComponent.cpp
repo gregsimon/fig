@@ -37,7 +37,7 @@ MainContentComponent::~MainContentComponent()
   delete _codeDocument;
 }
 
-void MainContentComponent::paint (Graphics& g)
+void MainContentComponent::paint (Graphics& )
 {
   /*
   g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
@@ -82,16 +82,19 @@ void MainContentComponent::do_fileopen()
       _tabs.setTabName(0, file.getFileName());
     }
 #else
-  int flags = FileBrowserComponent::openMode | FileBrowserComponent::canSelectFiles;
+  int dialog_flags = FileBrowserComponent::openMode | FileBrowserComponent::canSelectFiles;
   WildcardFileFilter wildcard("*.*", "*", String());
   String startingFile;
   
-  FileBrowserComponent browserComponent(flags, startingFile, &wildcard, nullptr);
+  FileBrowserComponent browserComponent(dialog_flags, startingFile, &wildcard, nullptr);
 
   FileChooserDialogBox dialog("Open", String(),
     browserComponent, false, browserComponent.findColour(AlertWindow::backgroundColourId));
   if (dialog.show()) {
-    File file = browserComponent.getSelectedFile();
+    File file = browserComponent.getSelectedFile(0);
+    String contents = file.loadFileAsString();
+    _codeDocument->replaceAllContent(contents);
+    _tabs.setTabName(0, file.getFileName());
   }
 #endif
 }

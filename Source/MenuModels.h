@@ -31,7 +31,7 @@ public:
     arr.add("File");
     return arr;
   }
-  virtual PopupMenu getMenuForIndex(int topLevelMenuIndex, const String &menuName) override {
+  virtual PopupMenu getMenuForIndex(int topLevelMenuIndex, const String &) override {
     PopupMenu m;
     switch (topLevelMenuIndex) {
     case 0:
