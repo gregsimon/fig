@@ -53,6 +53,10 @@ private:
   typedef std::list<OpenDocument*> OpenDocsList;
   OpenDocsList _opendocs;
   
+  // settings
+  PropertiesFile::Options _options;
+  ApplicationProperties _applicationProperties;
+  PropertiesFile* _settings;
 
   ScopedPointer<Font> _editorFont;
   

@@ -6,6 +6,17 @@
 MainContentComponent::MainContentComponent()
 : _tabs( TabbedButtonBar::Orientation::TabsAtTop)
 {
+  _options.applicationName = "Gooey";
+  _options.commonToAllUsers = false;
+  _options.filenameSuffix = "xml";
+  _options.folderName = "GregsTools";
+  _options.storageFormat = PropertiesFile::storeAsXML;
+  _options.ignoreCaseOfKeyNames = true;
+  _options.osxLibrarySubFolder = "Application Support";
+  _applicationProperties.setStorageParameters(_options);
+  _settings = _applicationProperties.getUserSettings();
+
+
   // load the font
   int dataSize = 0;
   const char* data = BinaryData::getNamedResource("InconsolataRegular_ttf", dataSize);
@@ -29,7 +40,7 @@ MainContentComponent::MainContentComponent()
   addAndMakeVisible(&_tabs);
 
 
-  setSize(1024, 768);
+  setSize(_settings->getIntValue("win_width", 1024), _settings->getIntValue("win_height", 768));
 }
 
 MainContentComponent::~MainContentComponent()
@@ -52,6 +63,9 @@ void MainContentComponent::resized()
 {
   _menu.setBounds(0, 0, getWidth(), 24);
   _tabs.setBounds(0, 24, getWidth(), getHeight()-48);
+
+  _settings->setValue("win_width", getWidth());
+  _settings->setValue("win_height", getHeight());
 }
 
 void MainContentComponent::menuItemSelected(int menuItemID)
