@@ -22,20 +22,19 @@ void MainContentComponent::getCommandInfo(CommandID commandID, ApplicationComman
   switch (commandID) {
   case FILE_New:
     result.setInfo("New", "Create a new file", "File Menu", 0);
-    result.defaultKeypresses.add(KeyPress('n', ModifierKeys::ctrlModifier, 0));
-    result.setActive(true);
+    result.addDefaultKeypress('n', ModifierKeys::ctrlModifier);
     break;
   case FILE_Open:
     result.setInfo("Open...", "Open a new object to edit", "File Menu", 0);
-    result.defaultKeypresses.add(KeyPress('o', ModifierKeys::ctrlModifier, 0));
+    result.addDefaultKeypress('o', ModifierKeys::ctrlModifier);
     break;
   case FILE_Close:
     result.setInfo("Close", "Close currently focused object tab", "File Menu", 0);
-    result.defaultKeypresses.add(KeyPress('w', ModifierKeys::ctrlModifier, 0));
+    result.addDefaultKeypress('w', ModifierKeys::ctrlModifier);
     break;
   case FILE_Save:
     result.setInfo("Save", "Save changes", "File Menu", 0);
-    result.defaultKeypresses.add(KeyPress('s', ModifierKeys::ctrlModifier, 0));
+    result.addDefaultKeypress('s', ModifierKeys::ctrlModifier);
     break;
   case FILE_SaveAs:
     result.setInfo("Save As...", "Save changes to a new object", "File Menu", 0);
@@ -43,8 +42,6 @@ void MainContentComponent::getCommandInfo(CommandID commandID, ApplicationComman
   default:
     return;
   }
-
-  result.setActive(true);
 }
 
 bool MainContentComponent::perform(const InvocationInfo &info)
@@ -133,12 +130,12 @@ void MainContentComponent::resized()
 
 void MainContentComponent::menuItemSelected(int menuItemID)
 {
-  switch (menuItemID) {
-  case FILE_Exit:
-      _menu.setModel(nullptr);
-    JUCEApplication::getInstance()->perform(ApplicationCommandTarget::InvocationInfo(StandardApplicationCommandIDs::quit));
-    break;
-  }
+  //switch (menuItemID) {
+  //case FILE_Exit:
+  //    _menu.setModel(nullptr);
+  //  JUCEApplication::getInstance()->perform(ApplicationCommandTarget::InvocationInfo(StandardApplicationCommandIDs::quit));
+  //  break;
+  //}
 }
 
 void MainContentComponent::changeListenerCallback(ChangeBroadcaster *)
