@@ -24,7 +24,7 @@ MainComponent::MainComponent()
   const char* data = BinaryData::getNamedResource("InconsolataRegular_ttf", dataSize);
   Typeface::Ptr font_data = Typeface::createSystemTypefaceFor(data, dataSize);
   _editorFont = new Font(font_data);
-  _editorFont->setHeight(20.0f);
+  _editorFont->setHeight(16.0f);
 
   // set up commands
   // TODO

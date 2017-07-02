@@ -13,8 +13,10 @@ MainWindow::MainWindow(String name) : DocumentWindow(name,
   .findColour(ResizableWindow::backgroundColourId),
   DocumentWindow::allButtons)
 {
+  
   setUsingNativeTitleBar(true);
   mainComponent = new MainComponent();
+  mainComponent->setLookAndFeel(&darkLookAndFeel);
   setContentOwned(mainComponent, true);
 
   addKeyListener(getApplicationCommandManager().getKeyMappings());
