@@ -213,26 +213,33 @@ void MainComponent::do_fileclose()
 
 void MainComponent::do_fileopen()
 {
+  File file;
 #if JUCE_MAC
-    FileChooser myChooser ("Select a file to open...",
+    FileChooser myChooser ("Select a file to edit",
                            File::getSpecialLocation (File::userHomeDirectory),
                            "*");
     if (myChooser.browseForFileToOpen())
     {
-      File file (myChooser.getResult());
-      add_document(file.loadFileAsString());
+      file = myChooser.getResult();
+      
     }
 #else
   int dialog_flags = FileBrowserComponent::openMode | FileBrowserComponent::canSelectFiles;
   WildcardFileFilter wildcard("*.cpp;*.h;*.cc;*.hpp;*.c;*.dart;*.lua;*.txt;*.gn;*.gni;", "*", String());
   String startingFile;
   
-  FileBrowserComponent browserComponent(dialog_flags, startingFile, &wildcard, nullptr);
+  FileBrowserComponent browserComponent(dialog_flags, _settings->getValue("last folder"), 
+    &wildcard, nullptr);
 
-  FileChooserDialogBox dialog("Open", String(),
+  FileChooserDialogBox dialog("Select a file to edit", String(),
     browserComponent, false, browserComponent.findColour(AlertWindow::backgroundColourId));
   if (dialog.show()) {
-    add_document(browserComponent.getSelectedFile(0));
+    file = browserComponent.getSelectedFile(0);
   }
 #endif
+
+  if (file.getFullPathName().length()) {
+    add_document(file);
+    _settings->setValue("last folder", file.getParentDirectory().getFullPathName());
+  }
 }
