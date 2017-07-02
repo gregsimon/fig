@@ -74,7 +74,16 @@ void MainComponent::getAllCommands(Array< CommandID > &commands)
     MainWindow::FILE_Close,
     MainWindow::FILE_Save,
     MainWindow::FILE_SaveAs,
+
+    MainWindow::EDIT_Undo,
+    MainWindow::EDIT_Redo,
+    MainWindow::EDIT_Cut,
+    MainWindow::EDIT_Copy,
+    MainWindow::EDIT_Paste,
+    MainWindow::EDIT_SelectAll,
+
     MainWindow::FILE_Exit
+
   };
 
   commands.addArray(ids, numElementsInArray(ids));
@@ -108,6 +117,30 @@ void MainComponent::getCommandInfo(CommandID commandID, ApplicationCommandInfo &
     result.setInfo("Exit", "Exit editor", generalCategory, 0);
     result.addDefaultKeypress('q', ModifierKeys::commandModifier);
     break;
+  case MainWindow::EDIT_Undo:
+    result.setInfo("Undo", "Undo last action", generalCategory, 0);
+    result.addDefaultKeypress('z', ModifierKeys::commandModifier);
+    break;
+  case MainWindow::EDIT_Redo:
+    result.setInfo("Redo", "redo last action", generalCategory, 0);
+    result.addDefaultKeypress('z', ModifierKeys::commandModifier);
+    break;
+  case MainWindow::EDIT_Copy:
+    result.setInfo("Copy", "copy", generalCategory, 0);
+    result.addDefaultKeypress('c', ModifierKeys::commandModifier);
+    break;
+  case MainWindow::EDIT_Cut:
+    result.setInfo("Cut", "cut", generalCategory, 0);
+    result.addDefaultKeypress('x', ModifierKeys::commandModifier);
+    break;
+  case MainWindow::EDIT_Paste:
+    result.setInfo("Paste", "paste", generalCategory, 0);
+    result.addDefaultKeypress('v', ModifierKeys::commandModifier);
+    break;
+  case MainWindow::EDIT_SelectAll:
+    result.setInfo("Select All", "select all", generalCategory, 0);
+    result.addDefaultKeypress('a', ModifierKeys::commandModifier);
+    break;
   default:
     return;
   }
@@ -124,6 +157,34 @@ bool MainComponent::perform(const InvocationInfo &info)
     break;
   case MainWindow::FILE_Exit:
     do_exit();
+    break;
+
+  case MainWindow::EDIT_Undo:
+    if (MainComponent::OpenDocument* doc = currentDoc()) {
+        doc->editor->undo();
+    }
+    break; 
+  case MainWindow::EDIT_Redo:
+      if (MainComponent::OpenDocument* doc = currentDoc())
+        doc->editor->redo();
+      break;
+
+  case MainWindow::EDIT_Copy:
+    if (MainComponent::OpenDocument* doc = currentDoc())
+      doc->editor->copyToClipboard();
+    break;
+  case MainWindow::EDIT_Paste:
+    if (MainComponent::OpenDocument* doc = currentDoc())
+      doc->editor->pasteFromClipboard();
+    break;
+  case MainWindow::EDIT_Cut:
+    if (MainComponent::OpenDocument* doc = currentDoc())
+      doc->editor->cutToClipboard();
+    break;
+  case MainWindow::EDIT_SelectAll:
+    if (MainComponent::OpenDocument* doc = currentDoc()) {
+      doc->editor->selectAll();
+    }
     break;
   }
   return true;
@@ -145,6 +206,7 @@ void MainComponent::resized()
 StringArray MainComponent::getMenuBarNames() {
   StringArray arr;
   arr.add("File");
+  arr.add("Edit");
   return arr;
 }
 
@@ -162,6 +224,16 @@ PopupMenu MainComponent::getMenuForIndex(int topLevelMenuIndex, const String &) 
     m.addSeparator();
     m.addCommandItem(commandManager, MainWindow::FILE_Exit);
     break;
+  case 1:
+    m.addCommandItem(commandManager, MainWindow::EDIT_Undo);
+    m.addCommandItem(commandManager, MainWindow::EDIT_Redo);
+    m.addSeparator();
+    m.addCommandItem(commandManager, MainWindow::EDIT_Cut);
+    m.addCommandItem(commandManager, MainWindow::EDIT_Copy);
+    m.addCommandItem(commandManager, MainWindow::EDIT_Paste);
+    m.addSeparator();
+    m.addCommandItem(commandManager, MainWindow::EDIT_SelectAll);
+    break;
   }
 
   return m;
@@ -170,6 +242,20 @@ PopupMenu MainComponent::getMenuForIndex(int topLevelMenuIndex, const String &) 
 void MainComponent::menuItemSelected(int /*menuItemID*/, int /*topLevelMenuIndex*/) { }
 
 void MainComponent::changeListenerCallback(ChangeBroadcaster *) { }
+
+MainComponent::OpenDocument* MainComponent::currentDoc() {
+  int index = _tabs.getCurrentTabIndex();
+  if (index < 0)
+    return nullptr;
+
+  for (OpenDocsList::iterator it = _opendocs.begin(); it != _opendocs.end(); ++it) {
+    if ((*it)->editor == _tabs.getTabContentComponent(index)) {
+      return *it;
+    }
+  }
+
+  return nullptr;
+}
 
 void MainComponent::add_document(const File& file)
 {

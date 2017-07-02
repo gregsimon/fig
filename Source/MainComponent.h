@@ -58,6 +58,7 @@ private:
     }
 
     File file;
+    int undo = 0;
     bool unsaved_changes = false;
     ScopedPointer<CodeTokeniser> tokenizer;
     CodeEditorComponent* editor;
@@ -66,6 +67,8 @@ private:
   
   typedef std::list<OpenDocument*> OpenDocsList;
   OpenDocsList _opendocs;
+
+  OpenDocument* currentDoc();
   
   // settings
   PropertiesFile::Options _options;

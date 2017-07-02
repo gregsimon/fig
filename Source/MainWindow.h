@@ -21,6 +21,13 @@ public:
     FILE_Save,
     FILE_SaveAs,
 
+    EDIT_Undo,
+    EDIT_Redo,
+    EDIT_Cut,
+    EDIT_Copy,
+    EDIT_Paste,
+    EDIT_SelectAll,
+
 
     FILE_Exit
   };
