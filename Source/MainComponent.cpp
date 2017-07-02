@@ -259,6 +259,15 @@ MainComponent::OpenDocument* MainComponent::currentDoc() {
 
 void MainComponent::add_document(const File& file)
 {
+  // Is this file already open? Then just select it.
+  int index = 0;
+  for (OpenDocsList::iterator it = _opendocs.begin(); it != _opendocs.end(); ++it, ++index) {
+    if ((*it)->file == file) {
+      _tabs.setCurrentTabIndex(index);
+      return;
+    }
+  }
+
   OpenDocument* doc = new OpenDocument(file);
   _opendocs.push_back(doc);
   
