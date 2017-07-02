@@ -1,11 +1,71 @@
 #include "MainComponent.h"
 
+ApplicationCommandManager* cmdManager = nullptr;
 
 
+ApplicationCommandTarget * 	MainContentComponent::getNextCommandTarget()
+{
+  return nullptr;
+}
+
+void MainContentComponent::getAllCommands(Array< CommandID > &commands)
+{
+  commands.add(FILE_New);
+  commands.add(FILE_Open);
+  commands.add(FILE_Close);
+  commands.add(FILE_Save);
+  commands.add(FILE_SaveAs);
+}
+
+void MainContentComponent::getCommandInfo(CommandID commandID, ApplicationCommandInfo &result)
+{
+  switch (commandID) {
+  case FILE_New:
+    result.setInfo("New", "Create a new file", "File Menu", 0);
+    result.defaultKeypresses.add(KeyPress('n', ModifierKeys::ctrlModifier, 0));
+    result.setActive(true);
+    break;
+  case FILE_Open:
+    result.setInfo("Open...", "Open a new object to edit", "File Menu", 0);
+    result.defaultKeypresses.add(KeyPress('o', ModifierKeys::ctrlModifier, 0));
+    break;
+  case FILE_Close:
+    result.setInfo("Close", "Close currently focused object tab", "File Menu", 0);
+    result.defaultKeypresses.add(KeyPress('w', ModifierKeys::ctrlModifier, 0));
+    break;
+  case FILE_Save:
+    result.setInfo("Save", "Save changes", "File Menu", 0);
+    result.defaultKeypresses.add(KeyPress('s', ModifierKeys::ctrlModifier, 0));
+    break;
+  case FILE_SaveAs:
+    result.setInfo("Save As...", "Save changes to a new object", "File Menu", 0);
+    break;
+  default:
+    return;
+  }
+
+  result.setActive(true);
+}
+
+bool MainContentComponent::perform(const InvocationInfo &info)
+{
+  switch (info.commandID) {
+  case FILE_Open:
+    do_fileopen();
+    break;
+  case FILE_Close:
+    do_fileclose();
+    break;
+  }
+  return true;
+}
 
 MainContentComponent::MainContentComponent()
 : _tabs( TabbedButtonBar::Orientation::TabsAtTop)
 {
+  cmdManager = new ApplicationCommandManager;
+  cmdManager->setFirstCommandTarget(this);
+
   _options.applicationName = "Gooey";
   _options.commonToAllUsers = false;
   _options.filenameSuffix = "xml";
@@ -16,6 +76,7 @@ MainContentComponent::MainContentComponent()
   _applicationProperties.setStorageParameters(_options);
   _settings = _applicationProperties.getUserSettings();
 
+  cmdManager->registerAllCommandsForTarget(this);
 
   // load the font
   int dataSize = 0;
@@ -28,7 +89,7 @@ MainContentComponent::MainContentComponent()
   // TODO
   
   // setup menus
-  _model = new MainMenuModel();
+  _model = new MainMenuModel(cmdManager);
   _model->addListener(this);
 #if JUCE_MAC
     MenuBarModel::setMacMainMenu(_model);
@@ -39,7 +100,7 @@ MainContentComponent::MainContentComponent()
   // tabs
   addAndMakeVisible(&_tabs);
 
-
+  // restore window size from settings
   setSize(_settings->getIntValue("win_width", 1024), _settings->getIntValue("win_height", 768));
 }
 
@@ -53,6 +114,8 @@ MainContentComponent::~MainContentComponent()
   for (std::list<OpenDocument*>::iterator it = _opendocs.begin(); it != _opendocs.end(); ++it) {
     delete (*it);
   }
+
+  delete cmdManager;
 }
 
 void MainContentComponent::paint (Graphics& )
@@ -71,12 +134,6 @@ void MainContentComponent::resized()
 void MainContentComponent::menuItemSelected(int menuItemID)
 {
   switch (menuItemID) {
-  case FILE_Open: 
-    do_fileopen();
-    break;
-  case FILE_Close:
-    do_fileclose();
-    break;
   case FILE_Exit:
       _menu.setModel(nullptr);
     JUCEApplication::getInstance()->perform(ApplicationCommandTarget::InvocationInfo(StandardApplicationCommandIDs::quit));

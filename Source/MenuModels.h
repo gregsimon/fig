@@ -6,13 +6,23 @@ enum MenuIds {
   FILE_Open,
   FILE_Close,
   FILE_Save,
-  FILE_SaveAs,
-  FILE_Exit
+  FILE_SaveAs
 };
 
 class MainMenuModel : public MenuBarModel {
 public:
-  MainMenuModel() {}
+  MainMenuModel(ApplicationCommandManager* cmdmgr) {
+    file_menu.addCommandItem(cmdmgr, FILE_New);
+    file_menu.addCommandItem(cmdmgr, FILE_Open);
+    file_menu.addCommandItem(cmdmgr, FILE_Close);
+    file_menu.addSeparator();
+    file_menu.addCommandItem(cmdmgr, FILE_Save);
+    file_menu.addCommandItem(cmdmgr, FILE_SaveAs);
+#if !defined(JUCE_MAC)
+    file_menu.addSeparator();
+    file_menu.addItem(StandardApplicationCommandIDs::quit, "Exit");
+#endif
+  }
 
   class Listener {
   public:
@@ -36,15 +46,7 @@ public:
     PopupMenu m;
     switch (topLevelMenuIndex) {
     case 0:
-      // File
-      m.addItem(FILE_New, "New...", true);
-      m.addItem(FILE_Open, "Open...", true);
-      m.addItem(FILE_Close, "Close", true);
-      m.addSeparator();
-      m.addItem(FILE_Save, "Save", true);
-      m.addItem(FILE_SaveAs, "Save As...", true);
-      m.addSeparator();
-      m.addItem(FILE_Exit, "Exit", true);
+      return file_menu;
       break;
 
     }
@@ -56,4 +58,7 @@ public:
   }
 private:
   ListenerList<Listener> _listeners;
+  PopupMenu file_menu;
+
+  MainMenuModel() {}
 };

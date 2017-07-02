@@ -6,7 +6,12 @@
 
 #include <list>
 
-class MainContentComponent   : public Component, public MainMenuModel::Listener, public ChangeListener
+extern ApplicationCommandManager* cmdManager;
+
+class MainContentComponent   : public Component, 
+  public MainMenuModel::Listener, 
+  public ChangeListener,
+  public ApplicationCommandTarget
 {
 public:
   MainContentComponent();
@@ -16,6 +21,12 @@ public:
   void resized() override;
   void menuItemSelected(int menuItemID) override;
   void changeListenerCallback(ChangeBroadcaster *source) override;
+
+  // ApplicationCommandTarget
+  virtual ApplicationCommandTarget * 	getNextCommandTarget() override;
+  virtual void 	getAllCommands(Array< CommandID > &commands) override;
+  virtual void 	getCommandInfo(CommandID commandID, ApplicationCommandInfo &result) override;
+  virtual bool 	perform(const InvocationInfo &info) override;
 
   void do_fileopen();
   void do_fileclose();
