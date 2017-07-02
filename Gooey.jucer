@@ -6,6 +6,9 @@
               jucerVersion="5.0.2">
   <MAINGROUP id="lajgul" name="Gooey">
     <GROUP id="{43400221-949D-1E05-4F19-06BCA9DA3D1E}" name="Source">
+      <FILE id="XCCVfM" name="App.cpp" compile="1" resource="0" file="Source/App.cpp"/>
+      <FILE id="lurBi4" name="MainWindow.h" compile="0" resource="0" file="Source/MainWindow.h"/>
+      <FILE id="GBmci1" name="MainWindow.cpp" compile="1" resource="0" file="Source/MainWindow.cpp"/>
       <GROUP id="{F588E20D-136A-FD49-C2E4-2F34DC7DF488}" name="fonts">
         <FILE id="Kv6wpq" name="Inconsolata-Regular.ttf" compile="0" resource="1"
               file="fonts/Inconsolata-Regular.ttf"/>
@@ -14,7 +17,6 @@
       <FILE id="izAQF9" name="MainComponent.cpp" compile="1" resource="0"
             file="Source/MainComponent.cpp"/>
       <FILE id="O566sS" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
-      <FILE id="Q8bPUS" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>

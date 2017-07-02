@@ -6,20 +6,18 @@
 
 #include <list>
 
-extern ApplicationCommandManager* cmdManager;
+//extern ApplicationCommandManager* cmdManager;
 
-class MainContentComponent   : public Component, 
-  public MainMenuModel::Listener, 
+class MainComponent   : public Component, 
   public ChangeListener,
   public ApplicationCommandTarget
 {
 public:
-  MainContentComponent();
-  ~MainContentComponent();
+  MainComponent();
+  ~MainComponent();
 
   void paint (Graphics&) override;
   void resized() override;
-  void menuItemSelected(int menuItemID) override;
   void changeListenerCallback(ChangeBroadcaster *source) override;
 
   // ApplicationCommandTarget
@@ -72,11 +70,11 @@ private:
   ScopedPointer<Font> _editorFont;
   
   MenuBarComponent _menu;
-  ScopedPointer<MainMenuModel> _model;
+  MainMenuModel _menuModel;
   
   TabbedComponent _tabs;
 
-  JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent)
+  JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };
 
 

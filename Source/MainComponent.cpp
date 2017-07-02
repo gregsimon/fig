@@ -1,67 +1,75 @@
+
+#include "../JuceLibraryCode/JuceHeader.h"
+#include "MainWindow.h"
 #include "MainComponent.h"
 
-ApplicationCommandManager* cmdManager = nullptr;
+//ApplicationCommandManager* cmdManager = nullptr;
 
-
-ApplicationCommandTarget * 	MainContentComponent::getNextCommandTarget()
+ApplicationCommandTarget * 	MainComponent::getNextCommandTarget()
 {
-  return nullptr;
+  return findFirstTargetParentComponent();
 }
 
-void MainContentComponent::getAllCommands(Array< CommandID > &commands)
+void MainComponent::getAllCommands(Array< CommandID > &commands)
 {
-  commands.add(FILE_New);
-  commands.add(FILE_Open);
-  commands.add(FILE_Close);
-  commands.add(FILE_Save);
-  commands.add(FILE_SaveAs);
+  const CommandID ids[] = { 
+    MainWindow::FILE_New,
+    MainWindow::FILE_Open,
+    MainWindow::FILE_Close,
+    MainWindow::FILE_Save,
+    MainWindow::FILE_SaveAs
+  };
+
+  commands.addArray(ids, numElementsInArray(ids));
 }
 
-void MainContentComponent::getCommandInfo(CommandID commandID, ApplicationCommandInfo &result)
+void MainComponent::getCommandInfo(CommandID commandID, ApplicationCommandInfo &result)
 {
+  const String generalCategory("General");
+
   switch (commandID) {
-  case FILE_New:
-    result.setInfo("New", "Create a new file", "File Menu", 0);
-    result.addDefaultKeypress('n', ModifierKeys::ctrlModifier);
+  case MainWindow::FILE_New:
+    result.setInfo("New", "Create a new file", generalCategory, 0);
+    result.addDefaultKeypress('n', ModifierKeys::commandModifier);
     break;
-  case FILE_Open:
-    result.setInfo("Open...", "Open a new object to edit", "File Menu", 0);
-    result.addDefaultKeypress('o', ModifierKeys::ctrlModifier);
+  case MainWindow::FILE_Open:
+    result.setInfo("Open...", "Open a new object to edit", generalCategory, 0);
+    result.addDefaultKeypress('o', ModifierKeys::commandModifier);
     break;
-  case FILE_Close:
-    result.setInfo("Close", "Close currently focused object tab", "File Menu", 0);
-    result.addDefaultKeypress('w', ModifierKeys::ctrlModifier);
+  case MainWindow::FILE_Close:
+    result.setInfo("Close", "Close currently focused object tab", generalCategory, 0);
+    result.addDefaultKeypress('w', ModifierKeys::commandModifier);
     break;
-  case FILE_Save:
-    result.setInfo("Save", "Save changes", "File Menu", 0);
-    result.addDefaultKeypress('s', ModifierKeys::ctrlModifier);
+  case MainWindow::FILE_Save:
+    result.setInfo("Save", "Save changes", generalCategory, 0);
+    result.addDefaultKeypress('s', ModifierKeys::commandModifier);
     break;
-  case FILE_SaveAs:
-    result.setInfo("Save As...", "Save changes to a new object", "File Menu", 0);
+  case MainWindow::FILE_SaveAs:
+    result.setInfo("Save As...", "Save changes to a new object", generalCategory, 0);
     break;
   default:
     return;
   }
 }
 
-bool MainContentComponent::perform(const InvocationInfo &info)
+bool MainComponent::perform(const InvocationInfo &info)
 {
   switch (info.commandID) {
-  case FILE_Open:
+  case MainWindow::FILE_Open:
     do_fileopen();
     break;
-  case FILE_Close:
+  case MainWindow::FILE_Close:
     do_fileclose();
     break;
   }
   return true;
 }
 
-MainContentComponent::MainContentComponent()
+MainComponent::MainComponent()
 : _tabs( TabbedButtonBar::Orientation::TabsAtTop)
 {
-  cmdManager = new ApplicationCommandManager;
-  cmdManager->setFirstCommandTarget(this);
+  //cmdManager = new ApplicationCommandManager
+  //cmdManager->setFirstCommandTarget(this);
 
   _options.applicationName = "Gooey";
   _options.commonToAllUsers = false;
@@ -73,7 +81,9 @@ MainContentComponent::MainContentComponent()
   _applicationProperties.setStorageParameters(_options);
   _settings = _applicationProperties.getUserSettings();
 
-  cmdManager->registerAllCommandsForTarget(this);
+  //cmdManager->registerAllCommandsForTarget(this);
+
+  //addKeyListener(cmdManager->getKeyMappings());
 
   // load the font
   int dataSize = 0;
@@ -85,23 +95,22 @@ MainContentComponent::MainContentComponent()
   // set up commands
   // TODO
   
-  // setup menus
-  _model = new MainMenuModel(cmdManager);
-  _model->addListener(this);
+  // menu bar
+  _menuModel.setApplicationCommandManagerToWatch(&MainWindow::getApplicationCommandManager());
 #if JUCE_MAC
-    MenuBarModel::setMacMainMenu(_model);
+    MenuBarModel::setMacMainMenu(_menuModel);
 #endif
-  _menu.setModel(_model);
+  _menu.setModel(&_menuModel);
   addAndMakeVisible(&_menu);
   
-  // tabs
+  // open document tabs
   addAndMakeVisible(&_tabs);
 
   // restore window size from settings
   setSize(_settings->getIntValue("win_width", 1024), _settings->getIntValue("win_height", 768));
 }
 
-MainContentComponent::~MainContentComponent()
+MainComponent::~MainComponent()
 {
   _menu.setModel(nullptr);
 #if JUCE_MAC
@@ -112,14 +121,14 @@ MainContentComponent::~MainContentComponent()
     delete (*it);
   }
 
-  delete cmdManager;
+  //delete cmdManager;
 }
 
-void MainContentComponent::paint (Graphics& )
+void MainComponent::paint (Graphics& )
 {
 }
 
-void MainContentComponent::resized()
+void MainComponent::resized()
 {
   _menu.setBounds(0, 0, getWidth(), 24);
   _tabs.setBounds(0, 24, getWidth(), getHeight()-48);
@@ -128,21 +137,11 @@ void MainContentComponent::resized()
   _settings->setValue("win_height", getHeight());
 }
 
-void MainContentComponent::menuItemSelected(int menuItemID)
-{
-  //switch (menuItemID) {
-  //case FILE_Exit:
-  //    _menu.setModel(nullptr);
-  //  JUCEApplication::getInstance()->perform(ApplicationCommandTarget::InvocationInfo(StandardApplicationCommandIDs::quit));
-  //  break;
-  //}
-}
-
-void MainContentComponent::changeListenerCallback(ChangeBroadcaster *)
+void MainComponent::changeListenerCallback(ChangeBroadcaster *)
 {
 }
 
-void MainContentComponent::add_document(const File& file)
+void MainComponent::add_document(const File& file)
 {
   OpenDocument* doc = new OpenDocument(file);
   _opendocs.push_back(doc);
@@ -152,7 +151,7 @@ void MainContentComponent::add_document(const File& file)
   resized();
 }
 
-void MainContentComponent::do_fileclose()
+void MainComponent::do_fileclose()
 {
   int index = _tabs.getCurrentTabIndex();
   if (index < 0)
@@ -167,7 +166,7 @@ void MainContentComponent::do_fileclose()
   }
 }
 
-void MainContentComponent::do_fileopen()
+void MainComponent::do_fileopen()
 {
 #if JUCE_MAC
     FileChooser myChooser ("Select a file to open...",
