@@ -98,7 +98,7 @@ MainComponent::MainComponent()
   // menu bar
   _menuModel.setApplicationCommandManagerToWatch(&MainWindow::getApplicationCommandManager());
 #if JUCE_MAC
-    MenuBarModel::setMacMainMenu(_menuModel);
+    MenuBarModel::setMacMainMenu(&_menuModel);
 #endif
   _menu.setModel(&_menuModel);
   addAndMakeVisible(&_menu);
@@ -175,9 +175,7 @@ void MainComponent::do_fileopen()
     if (myChooser.browseForFileToOpen())
     {
       File file (myChooser.getResult());
-      String contents = file.loadFileAsString();
-      _codeDocument->replaceAllContent(contents);
-      _tabs.setTabName(0, file.getFileName());
+      add_document(file.loadFileAsString());
     }
 #else
   int dialog_flags = FileBrowserComponent::openMode | FileBrowserComponent::canSelectFiles;
