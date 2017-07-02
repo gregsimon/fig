@@ -19,6 +19,7 @@ MainComponent::MainComponent()
   _settings = _applicationProperties.getUserSettings();
 
   // load the font
+
   int dataSize = 0;
   const char* data = BinaryData::getNamedResource("InconsolataRegular_ttf", dataSize);
   Typeface::Ptr font_data = Typeface::createSystemTypefaceFor(data, dataSize);
@@ -72,7 +73,8 @@ void MainComponent::getAllCommands(Array< CommandID > &commands)
     MainWindow::FILE_Open,
     MainWindow::FILE_Close,
     MainWindow::FILE_Save,
-    MainWindow::FILE_SaveAs
+    MainWindow::FILE_SaveAs,
+    MainWindow::FILE_Exit
   };
 
   commands.addArray(ids, numElementsInArray(ids));
@@ -102,6 +104,10 @@ void MainComponent::getCommandInfo(CommandID commandID, ApplicationCommandInfo &
   case MainWindow::FILE_SaveAs:
     result.setInfo("Save As...", "Save changes to a new object", generalCategory, 0);
     break;
+  case MainWindow::FILE_Exit:
+    result.setInfo("Exit", "Exit editor", generalCategory, 0);
+    result.addDefaultKeypress('q', ModifierKeys::commandModifier);
+    break;
   default:
     return;
   }
@@ -115,6 +121,9 @@ bool MainComponent::perform(const InvocationInfo &info)
     break;
   case MainWindow::FILE_Close:
     do_fileclose();
+    break;
+  case MainWindow::FILE_Exit:
+    do_exit();
     break;
   }
   return true;
@@ -150,6 +159,8 @@ PopupMenu MainComponent::getMenuForIndex(int topLevelMenuIndex, const String &) 
     m.addSeparator();
     m.addCommandItem(commandManager, MainWindow::FILE_Save);
     m.addCommandItem(commandManager, MainWindow::FILE_SaveAs);
+    m.addSeparator();
+    m.addCommandItem(commandManager, MainWindow::FILE_Exit);
     break;
   }
 
@@ -158,9 +169,7 @@ PopupMenu MainComponent::getMenuForIndex(int topLevelMenuIndex, const String &) 
 
 void MainComponent::menuItemSelected(int /*menuItemID*/, int /*topLevelMenuIndex*/) { }
 
-void MainComponent::changeListenerCallback(ChangeBroadcaster *)
-{
-}
+void MainComponent::changeListenerCallback(ChangeBroadcaster *) { }
 
 void MainComponent::add_document(const File& file)
 {
@@ -169,7 +178,22 @@ void MainComponent::add_document(const File& file)
   
   doc->editor->setFont(*_editorFont);
   _tabs.addTab(file.getFileName(), Colour(66, 67, 65), doc->editor, false);
+  _tabs.setCurrentTabIndex(_tabs.getNumTabs() - 1);
   resized();
+}
+
+void MainComponent::do_exit()
+{
+  // unsaved changes?
+  for (OpenDocsList::iterator it = _opendocs.begin(); it != _opendocs.end(); ++it) {
+    OpenDocument* d = *it;
+    if (d->unsaved_changes) {
+      // TODO : show dialog box "do you want to save"
+    }
+  }
+
+  // StandardApplicationCommandIDs::quit
+  MainWindow::getApplicationCommandManager().invokeDirectly(StandardApplicationCommandIDs::quit, false);
 }
 
 void MainComponent::do_fileclose()
@@ -200,7 +224,7 @@ void MainComponent::do_fileopen()
     }
 #else
   int dialog_flags = FileBrowserComponent::openMode | FileBrowserComponent::canSelectFiles;
-  WildcardFileFilter wildcard("*.*", "*", String());
+  WildcardFileFilter wildcard("*.cpp;*.h;*.cc;*.hpp;*.c;*.dart;*.lua;*.txt;*.gn;*.gni;", "*", String());
   String startingFile;
   
   FileBrowserComponent browserComponent(dialog_flags, startingFile, &wildcard, nullptr);

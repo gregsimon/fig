@@ -31,6 +31,7 @@ public:
 
   void do_fileopen();
   void do_fileclose();
+  void do_exit();
   void add_document(const File& file);
 
 private:
@@ -57,6 +58,7 @@ private:
     }
 
     File file;
+    bool unsaved_changes = false;
     ScopedPointer<CodeTokeniser> tokenizer;
     CodeEditorComponent* editor;
     CodeDocument* code_document;

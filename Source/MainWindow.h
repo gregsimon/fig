@@ -19,7 +19,10 @@ public:
     FILE_Open,
     FILE_Close,
     FILE_Save,
-    FILE_SaveAs
+    FILE_SaveAs,
+
+
+    FILE_Exit
   };
 
   void closeButtonPressed() override;
