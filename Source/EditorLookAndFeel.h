@@ -10,6 +10,10 @@ public:
     const char* data = BinaryData::getNamedResource("InconsolataRegular_ttf", dataSize);
     font = new Font(Typeface::createSystemTypefaceFor(data, dataSize));
     font->setHeight(16.0f);
+
+    setColour(0x1004500, Colour(39, 40, 34)); // JUCE\modules\juce_gui_extra\code_editor\juce_CodeEditorComponent.h
+    setColour(0x1004502, Colour(73, 72, 62)); // highlight color
+    setColour(0x1004505, Colour(114, 144, 138)); // lineNumberTextId
   }
   Font getTextButtonFont(TextButton &, int) override { return *font; }
   Font getMenuBarFont(MenuBarComponent &, int, const String &) override { return *font; }

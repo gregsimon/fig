@@ -8,6 +8,10 @@
 MainComponent::MainComponent()
   : _tabs(TabbedButtonBar::Orientation::TabsAtTop)
 {
+  _editorColorScheme.set("Keyword", Colour(249,38,114));
+  _editorColorScheme.set("Comment", Colour(92,113,75  ));
+
+
   _options.applicationName = "Gooey";
   _options.commonToAllUsers = false;
   _options.filenameSuffix = "xml";
@@ -18,13 +22,14 @@ MainComponent::MainComponent()
   _applicationProperties.setStorageParameters(_options);
   _settings = _applicationProperties.getUserSettings();
 
+
   // load the font
 
   int dataSize = 0;
   const char* data = BinaryData::getNamedResource("InconsolataRegular_ttf", dataSize);
   Typeface::Ptr font_data = Typeface::createSystemTypefaceFor(data, dataSize);
   _editorFont = new Font(font_data);
-  _editorFont->setHeight(16.0f);
+  _editorFont->setHeight(18.0f);
 
   // set up commands
   // TODO
@@ -272,6 +277,8 @@ void MainComponent::add_document(const File& file)
   _opendocs.push_back(doc);
   
   doc->editor->setFont(*_editorFont);
+  doc->editor->setColourScheme(_editorColorScheme);
+  //doc->editor->setColour();
   _tabs.addTab(file.getFileName(), Colour(66, 67, 65), doc->editor, false);
   _tabs.setCurrentTabIndex(_tabs.getNumTabs() - 1);
   resized();

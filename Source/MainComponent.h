@@ -75,6 +75,7 @@ private:
   ApplicationProperties _applicationProperties;
   PropertiesFile* _settings;
 
+  CodeEditorComponent::ColourScheme _editorColorScheme;
   ScopedPointer<Font> _editorFont;
   
   ScopedPointer<MenuBarComponent> _menu;
