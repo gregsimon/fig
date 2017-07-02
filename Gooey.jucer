@@ -13,7 +13,6 @@
         <FILE id="Kv6wpq" name="Inconsolata-Regular.ttf" compile="0" resource="1"
               file="fonts/Inconsolata-Regular.ttf"/>
       </GROUP>
-      <FILE id="f60820" name="MenuModels.h" compile="0" resource="0" file="Source/MenuModels.h"/>
       <FILE id="izAQF9" name="MainComponent.cpp" compile="1" resource="0"
             file="Source/MainComponent.cpp"/>
       <FILE id="O566sS" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>

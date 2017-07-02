@@ -2,14 +2,12 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-#include "MenuModels.h"
-
 #include <list>
 
-//extern ApplicationCommandManager* cmdManager;
 
 class MainComponent   : public Component, 
   public ChangeListener,
+  public MenuBarModel,
   public ApplicationCommandTarget
 {
 public:
@@ -25,6 +23,11 @@ public:
   virtual void 	getAllCommands(Array< CommandID > &commands) override;
   virtual void 	getCommandInfo(CommandID commandID, ApplicationCommandInfo &result) override;
   virtual bool 	perform(const InvocationInfo &info) override;
+
+  // MenuBarModel
+  virtual StringArray getMenuBarNames() override;
+  virtual PopupMenu getMenuForIndex(int topLevelMenuIndex, const String &) override;
+  virtual void 	menuItemSelected(int /*menuItemID*/, int /*topLevelMenuIndex*/) override;
 
   void do_fileopen();
   void do_fileclose();
@@ -69,8 +72,7 @@ private:
 
   ScopedPointer<Font> _editorFont;
   
-  MenuBarComponent _menu;
-  MainMenuModel _menuModel;
+  ScopedPointer<MenuBarComponent> _menu;
   
   TabbedComponent _tabs;
 

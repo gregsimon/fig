@@ -6,7 +6,6 @@
 class MainMenuModel : public MenuBarModel {
 public:
   MainMenuModel() {
-
     auto& commandManager = MainWindow::getApplicationCommandManager();
 
     file_menu.addCommandItem(&commandManager, MainWindow::FILE_New);
@@ -32,7 +31,6 @@ public:
     case 0:
       return file_menu;
       break;
-
     }
 
     return m;

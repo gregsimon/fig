@@ -3,7 +3,62 @@
 #include "MainWindow.h"
 #include "MainComponent.h"
 
-//ApplicationCommandManager* cmdManager = nullptr;
+
+
+MainComponent::MainComponent()
+  : _tabs(TabbedButtonBar::Orientation::TabsAtTop)
+{
+  _options.applicationName = "Gooey";
+  _options.commonToAllUsers = false;
+  _options.filenameSuffix = "xml";
+  _options.folderName = "GregsTools";
+  _options.storageFormat = PropertiesFile::storeAsXML;
+  _options.ignoreCaseOfKeyNames = true;
+  _options.osxLibrarySubFolder = "Application Support";
+  _applicationProperties.setStorageParameters(_options);
+  _settings = _applicationProperties.getUserSettings();
+
+  // load the font
+  int dataSize = 0;
+  const char* data = BinaryData::getNamedResource("InconsolataRegular_ttf", dataSize);
+  Typeface::Ptr font_data = Typeface::createSystemTypefaceFor(data, dataSize);
+  _editorFont = new Font(font_data);
+  _editorFont->setHeight(20.0f);
+
+  // set up commands
+  // TODO
+
+  // menu bar
+  _menu = new MenuBarComponent(this);
+  setApplicationCommandManagerToWatch(&MainWindow::getApplicationCommandManager());
+#if JUCE_MAC
+  MenuBarModel::setMacMainMenu(&_menuModel);
+#endif
+  //_menu.setModel(&_menuModel);
+  addAndMakeVisible(_menu);
+
+  // open document tabs
+  addAndMakeVisible(&_tabs);
+
+  // restore window size from settings
+  setSize(_settings->getIntValue("win_width", 1024), _settings->getIntValue("win_height", 768));
+}
+
+MainComponent::~MainComponent()
+{
+#if JUCE_MAC
+  MenuBarModel::setMacMainMenu(nullptr);
+#endif
+  PopupMenu::dismissAllActiveMenus();
+  _menu->setModel(nullptr);
+
+  for (std::list<OpenDocument*>::iterator it = _opendocs.begin(); it != _opendocs.end(); ++it) {
+    delete (*it);
+  }
+
+  //delete cmdManager;
+}
+
 
 ApplicationCommandTarget * 	MainComponent::getNextCommandTarget()
 {
@@ -65,77 +120,43 @@ bool MainComponent::perform(const InvocationInfo &info)
   return true;
 }
 
-MainComponent::MainComponent()
-: _tabs( TabbedButtonBar::Orientation::TabsAtTop)
-{
-  //cmdManager = new ApplicationCommandManager
-  //cmdManager->setFirstCommandTarget(this);
-
-  _options.applicationName = "Gooey";
-  _options.commonToAllUsers = false;
-  _options.filenameSuffix = "xml";
-  _options.folderName = "GregsTools";
-  _options.storageFormat = PropertiesFile::storeAsXML;
-  _options.ignoreCaseOfKeyNames = true;
-  _options.osxLibrarySubFolder = "Application Support";
-  _applicationProperties.setStorageParameters(_options);
-  _settings = _applicationProperties.getUserSettings();
-
-  //cmdManager->registerAllCommandsForTarget(this);
-
-  //addKeyListener(cmdManager->getKeyMappings());
-
-  // load the font
-  int dataSize = 0;
-  const char* data = BinaryData::getNamedResource("InconsolataRegular_ttf", dataSize);
-  Typeface::Ptr font_data = Typeface::createSystemTypefaceFor(data, dataSize);
-  _editorFont = new Font(font_data);
-  _editorFont->setHeight(20.0f);
-
-  // set up commands
-  // TODO
-  
-  // menu bar
-  _menuModel.setApplicationCommandManagerToWatch(&MainWindow::getApplicationCommandManager());
-#if JUCE_MAC
-    MenuBarModel::setMacMainMenu(&_menuModel);
-#endif
-  _menu.setModel(&_menuModel);
-  addAndMakeVisible(&_menu);
-  
-  // open document tabs
-  addAndMakeVisible(&_tabs);
-
-  // restore window size from settings
-  setSize(_settings->getIntValue("win_width", 1024), _settings->getIntValue("win_height", 768));
-}
-
-MainComponent::~MainComponent()
-{
-  _menu.setModel(nullptr);
-#if JUCE_MAC
-  MenuBarModel::setMacMainMenu(nullptr);
-#endif
-
-  for (std::list<OpenDocument*>::iterator it = _opendocs.begin(); it != _opendocs.end(); ++it) {
-    delete (*it);
-  }
-
-  //delete cmdManager;
-}
-
 void MainComponent::paint (Graphics& )
 {
 }
 
 void MainComponent::resized()
 {
-  _menu.setBounds(0, 0, getWidth(), 24);
+  _menu->setBounds(0, 0, getWidth(), 24);
   _tabs.setBounds(0, 24, getWidth(), getHeight()-48);
 
   _settings->setValue("win_width", getWidth());
   _settings->setValue("win_height", getHeight());
 }
+
+StringArray MainComponent::getMenuBarNames() {
+  StringArray arr;
+  arr.add("File");
+  return arr;
+}
+
+PopupMenu MainComponent::getMenuForIndex(int topLevelMenuIndex, const String &) {
+  ApplicationCommandManager* commandManager = &MainWindow::getApplicationCommandManager();
+  PopupMenu m;
+  switch (topLevelMenuIndex) {
+  case 0:
+    m.addCommandItem(commandManager, MainWindow::FILE_New);
+    m.addCommandItem(commandManager, MainWindow::FILE_Open);
+    m.addCommandItem(commandManager, MainWindow::FILE_Close);
+    m.addSeparator();
+    m.addCommandItem(commandManager, MainWindow::FILE_Save);
+    m.addCommandItem(commandManager, MainWindow::FILE_SaveAs);
+    break;
+  }
+
+  return m;
+}
+
+void MainComponent::menuItemSelected(int /*menuItemID*/, int /*topLevelMenuIndex*/) { }
 
 void MainComponent::changeListenerCallback(ChangeBroadcaster *)
 {
