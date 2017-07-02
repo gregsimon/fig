@@ -6,6 +6,8 @@
               jucerVersion="5.0.2">
   <MAINGROUP id="lajgul" name="Gooey">
     <GROUP id="{43400221-949D-1E05-4F19-06BCA9DA3D1E}" name="Source">
+      <FILE id="Ht0Xxj" name="EditorLookAndFeel.h" compile="0" resource="0"
+            file="Source/EditorLookAndFeel.h"/>
       <FILE id="XCCVfM" name="App.cpp" compile="1" resource="0" file="Source/App.cpp"/>
       <FILE id="lurBi4" name="MainWindow.h" compile="0" resource="0" file="Source/MainWindow.h"/>
       <FILE id="GBmci1" name="MainWindow.cpp" compile="1" resource="0" file="Source/MainWindow.cpp"/>

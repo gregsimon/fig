@@ -2,6 +2,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MainWindow.h"
 #include "MainComponent.h"
+#include "EditorLookAndFeel.h"
 
 // -------------------------------------------------------------------------
 //  MainWindow
@@ -13,10 +14,11 @@ MainWindow::MainWindow(String name) : DocumentWindow(name,
   .findColour(ResizableWindow::backgroundColourId),
   DocumentWindow::allButtons)
 {
+  darkLookAndFeel = new EditorLookAndFeel;
   
   setUsingNativeTitleBar(true);
   mainComponent = new MainComponent();
-  mainComponent->setLookAndFeel(&darkLookAndFeel);
+  mainComponent->setLookAndFeel(darkLookAndFeel);
   setContentOwned(mainComponent, true);
 
   addKeyListener(getApplicationCommandManager().getKeyMappings());
