@@ -36,7 +36,9 @@ public:
   void do_fileopen();
   void do_fileclose();
   void do_exit();
+  
   bool add_document(const File& file);
+  void save_open_file_positions();
 
 private:
   struct OpenDocument {

@@ -18,16 +18,7 @@ MainComponent::MainComponent()
   _applicationProperties.setStorageParameters(_options);
   _settings = _applicationProperties.getUserSettings();
 
-#if JUCE_WINDOWSSSS
-  // load the font (Consolas 10 pt)
-  _editorFont = new Font("Consolas", 14.0f, Font::plain);
-#endif
-#if JUCE_MACCCC
-  // Menlo Regular 12 pt
-  _editorFont = new Font("Menlo Regular", 14.0f, Font::plain);
-#endif
-  
-int dataSize = 0;
+  int dataSize = 0;
   const char* data = BinaryData::getNamedResource("InconsolataRegular_ttf", dataSize);
   Typeface::Ptr font_data = Typeface::createSystemTypefaceFor(data, dataSize);
   _editorFont = new Font(font_data);
@@ -43,18 +34,35 @@ int dataSize = 0;
   setApplicationCommandManagerToWatch(&MainWindow::getApplicationCommandManager());
 #if JUCE_MAC
   MenuBarModel::setMacMainMenu(this);
-#endif
+#else
   addAndMakeVisible(_menu);
-
+#endif
+  
   // open document tabs
   addAndMakeVisible(&_tabs);
 
   // restore window size from settings
   setSize(_settings->getIntValue("win_width", 1024), _settings->getIntValue("win_height", 768));
+  
+  // restore any tabs that were opened when we last closed.
+  String last_opened_files = _settings->getValue("last_opened_files");
+  String file_name = last_opened_files.upToFirstOccurrenceOf("|", false, false);
+  add_document(File(file_name));
+  while (1) {
+    last_opened_files = last_opened_files.substring(file_name.length()+1);
+    file_name = last_opened_files.upToFirstOccurrenceOf("|", false, false);
+    if (!file_name.length())
+      break;
+    
+    add_document(File(file_name));
+  }
 }
 
 MainComponent::~MainComponent()
 {
+  setApplicationCommandManagerToWatch(nullptr);
+
+  save_open_file_positions();
 #if JUCE_MAC
   MenuBarModel::setMacMainMenu(nullptr);
 #endif
@@ -65,7 +73,6 @@ MainComponent::~MainComponent()
     delete (*it);
   }
 
-  //delete cmdManager;
 }
 
 
@@ -77,7 +84,6 @@ ApplicationCommandTarget * 	MainComponent::getNextCommandTarget()
 void MainComponent::getAllCommands(Array< CommandID > &commands)
 {
   const CommandID ids[] = { 
-    MainWindow::FILE_New,
     MainWindow::FILE_Open,
     MainWindow::FILE_Close,
     MainWindow::FILE_Save,
@@ -99,9 +105,12 @@ void MainComponent::getAllCommands(Array< CommandID > &commands)
     MainWindow::VIEW_TextLarger,
     MainWindow::VIEW_TextSmaller,
 
-
-    MainWindow::FILE_Exit
-
+#if !defined(JUCE_MAC)
+    MainWindow::FILE_Exit,
+#endif
+    
+    MainWindow::FILE_New
+    
   };
 
   commands.addArray(ids, numElementsInArray(ids));
@@ -176,7 +185,7 @@ void MainComponent::getCommandInfo(CommandID commandID, ApplicationCommandInfo &
   // View
   case MainWindow::VIEW_PrevDoc:
     result.setInfo("Focus Previous Doc", "", generalCategory, 0);
-    result.addDefaultKeypress(KeyPress::tabKey, ModifierKeys::ctrlModifier| ModifierKeys::shiftModifier);
+    result.addDefaultKeypress(KeyPress::tabKey, ModifierKeys::ctrlModifier|ModifierKeys::shiftModifier);
     break;
   case MainWindow::VIEW_NextDoc:
     result.setInfo("Focus Next Doc", "", generalCategory, 0);
@@ -384,6 +393,17 @@ void MainComponent::show_prev_tab()
   _tabs.setCurrentTabIndex(index);
 }
 
+void MainComponent::save_open_file_positions()
+{
+  // save all the open documents' paths so we can re-open them when we start again.
+  String saved_names;
+  for (OpenDocsList::iterator it = _opendocs.begin(); it != _opendocs.end(); ++it) {
+    OpenDocument* d = *it;
+    saved_names << d->file.getFullPathName() << String("|");
+  }
+  _settings->setValue("last_opened_files", saved_names);
+}
+
 bool MainComponent::add_document(const File& file)
 {
   if (!file.existsAsFile())
@@ -416,6 +436,8 @@ bool MainComponent::add_document(const File& file)
 
 void MainComponent::do_exit()
 {
+  
+  
   // unsaved changes?
   for (OpenDocsList::iterator it = _opendocs.begin(); it != _opendocs.end(); ++it) {
     OpenDocument* d = *it;

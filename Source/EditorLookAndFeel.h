@@ -7,7 +7,7 @@ class EditorLookAndFeel : public LookAndFeel_V4 {
 public:
   EditorLookAndFeel() {
     int dataSize = 0;
-    const char* data = BinaryData::getNamedResource("InconsolataBold_ttf", dataSize);
+    const char* data = BinaryData::getNamedResource("InconsolataRegular_ttf", dataSize);
     font = new Font(Typeface::createSystemTypefaceFor(data, dataSize));
     font->setHeight(18.0f);
 
