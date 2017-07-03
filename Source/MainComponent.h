@@ -2,6 +2,8 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
+#include "CustomCppTokenizer.h"
+
 #include <list>
 
 
@@ -32,15 +34,21 @@ public:
   void do_fileopen();
   void do_fileclose();
   void do_exit();
-  void add_document(const File& file);
+  bool add_document(const File& file);
 
 private:
   struct OpenDocument {
-    OpenDocument(const File& f) : file(f), tokenizer(nullptr) {
+    OpenDocument() {}
+
+    bool load(const File& f) {
+
+      file = f;
+      if (!f.existsAsFile())
+        return false;
 
       String ext = f.getFileExtension();
       if (ext == ".cc" || ext == ".cpp" || ext == ".h" || ext == ".c")
-        tokenizer = new CPlusPlusCodeTokeniser;
+        tokenizer = new CustomCppTokenizer;
       else if (ext == ".lua")
         tokenizer = new LuaTokeniser;
       else if (ext == ".xml")
@@ -51,6 +59,7 @@ private:
       String contents = f.loadFileAsString();
       code_document->replaceAllContent(contents);
       editor->setTabSize(2, true);
+      return true;
     }
     ~OpenDocument() {
       delete editor;
@@ -61,8 +70,8 @@ private:
     int undo = 0;
     bool unsaved_changes = false;
     ScopedPointer<CodeTokeniser> tokenizer;
-    CodeEditorComponent* editor;
-    CodeDocument* code_document;
+    CodeEditorComponent* editor = nullptr;
+    CodeDocument* code_document = nullptr;
   };
   
   typedef std::list<OpenDocument*> OpenDocsList;
@@ -74,6 +83,8 @@ private:
   PropertiesFile::Options _options;
   ApplicationProperties _applicationProperties;
   PropertiesFile* _settings;
+  
+  int _recentCounter = 0;
 
   CodeEditorComponent::ColourScheme _editorColorScheme;
   ScopedPointer<Font> _editorFont;

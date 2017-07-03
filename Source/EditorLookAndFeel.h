@@ -9,9 +9,10 @@ public:
     int dataSize = 0;
     const char* data = BinaryData::getNamedResource("InconsolataRegular_ttf", dataSize);
     font = new Font(Typeface::createSystemTypefaceFor(data, dataSize));
-    font->setHeight(16.0f);
+    font->setHeight(16.9f);
 
-    setColour(0x1004500, Colour(39, 40, 34)); // JUCE\modules\juce_gui_extra\code_editor\juce_CodeEditorComponent.h
+    setColour(TextEditor::textColourId, Colour(0xF8, 0xF8, 0xF2));
+    setColour(0x1004500, Colour(0x27, 0x28, 0x22)); // background color
     setColour(0x1004502, Colour(73, 72, 62)); // highlight color
     setColour(0x1004505, Colour(114, 144, 138)); // lineNumberTextId
   }
@@ -21,7 +22,6 @@ public:
   Font getLabelFont(Label &) override { return *font; }
 
   void 	drawTabButton(TabBarButton &b, Graphics &g, bool, bool) override {
-    //LookAndFeel_V3::drawTabButton(b, g, isMouseOver, isMouseDown);
     TabbedButtonBar &bar = b.getTabbedButtonBar();
     StringArray arr = bar.getTabNames();
     String title = arr[b.getIndex()];

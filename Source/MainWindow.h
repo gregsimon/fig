@@ -24,6 +24,10 @@ public:
     FILE_Save,
     FILE_SaveAs,
 
+    FILE_Recent1,
+    FILE_Recent2,
+    FILE_Recent3,
+
     EDIT_Undo,
     EDIT_Redo,
     EDIT_Cut,

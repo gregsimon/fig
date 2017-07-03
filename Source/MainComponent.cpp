@@ -4,13 +4,9 @@
 #include "MainComponent.h"
 
 
-
 MainComponent::MainComponent()
   : _tabs(TabbedButtonBar::Orientation::TabsAtTop)
 {
-  _editorColorScheme.set("Keyword", Colour(249,38,114));
-  _editorColorScheme.set("Comment", Colour(92,113,75  ));
-
 
   _options.applicationName = "Gooey";
   _options.commonToAllUsers = false;
@@ -22,14 +18,22 @@ MainComponent::MainComponent()
   _applicationProperties.setStorageParameters(_options);
   _settings = _applicationProperties.getUserSettings();
 
-
-  // load the font
-
-  int dataSize = 0;
+#if JUCE_WINDOWSSSS
+  // load the font (Consolas 10 pt)
+  _editorFont = new Font("Consolas", 14.0f, Font::plain);
+#endif
+#if JUCE_MACCCC
+  // Menlo Regular 12 pt
+  _editorFont = new Font("Menlo Regular", 14.0f, Font::plain);
+#endif
+  
+int dataSize = 0;
   const char* data = BinaryData::getNamedResource("InconsolataRegular_ttf", dataSize);
   Typeface::Ptr font_data = Typeface::createSystemTypefaceFor(data, dataSize);
   _editorFont = new Font(font_data);
-  _editorFont->setHeight(18.0f);
+  _editorFont->setHeight(16.9f);
+  
+  
 
   // set up commands
   // TODO
@@ -80,6 +84,10 @@ void MainComponent::getAllCommands(Array< CommandID > &commands)
     MainWindow::FILE_Save,
     MainWindow::FILE_SaveAs,
 
+    MainWindow::FILE_Recent1,
+    MainWindow::FILE_Recent2,
+    MainWindow::FILE_Recent3,
+
     MainWindow::EDIT_Undo,
     MainWindow::EDIT_Redo,
     MainWindow::EDIT_Cut,
@@ -99,6 +107,7 @@ void MainComponent::getCommandInfo(CommandID commandID, ApplicationCommandInfo &
   const String generalCategory("General");
 
   switch (commandID) {
+  // File
   case MainWindow::FILE_New:
     result.setInfo("New", "Create a new file", generalCategory, 0);
     result.addDefaultKeypress('n', ModifierKeys::commandModifier);
@@ -122,6 +131,18 @@ void MainComponent::getCommandInfo(CommandID commandID, ApplicationCommandInfo &
     result.setInfo("Exit", "Exit editor", generalCategory, 0);
     result.addDefaultKeypress('q', ModifierKeys::commandModifier);
     break;
+
+  case MainWindow::FILE_Recent1:
+    result.setInfo(_settings->getValue("recent0", String("-")), String(), generalCategory, 0);
+    break;
+  case MainWindow::FILE_Recent2:
+    result.setInfo(_settings->getValue("recent1", String("-")), String(), generalCategory, 0);
+    break;
+  case MainWindow::FILE_Recent3:
+    result.setInfo(_settings->getValue("recent2", String("-")), String(), generalCategory, 0);
+    break;
+
+  // Edit
   case MainWindow::EDIT_Undo:
     result.setInfo("Undo", "Undo last action", generalCategory, 0);
     result.addDefaultKeypress('z', ModifierKeys::commandModifier);
@@ -153,12 +174,42 @@ void MainComponent::getCommandInfo(CommandID commandID, ApplicationCommandInfo &
 
 bool MainComponent::perform(const InvocationInfo &info)
 {
+  static float hh = 11.0f;
   switch (info.commandID) {
   case MainWindow::FILE_Open:
     do_fileopen();
     break;
   case MainWindow::FILE_Close:
     do_fileclose();
+    break;
+  case MainWindow::FILE_New:
+  {
+    OpenDocument* doc = *_opendocs.begin();
+    hh -= .1f;
+    _editorFont->setHeight(hh);
+    doc->editor->setFont(*_editorFont);
+    doc->editor->repaint();
+    Logger::outputDebugString(String::formatted("%f", hh));
+  }
+  break;
+  case MainWindow::FILE_Save:
+    {
+      OpenDocument* doc = * _opendocs.begin();
+      hh += .1f;
+      _editorFont->setHeight(hh);
+      doc->editor->setFont(*_editorFont);
+      doc->editor->repaint();
+      Logger::outputDebugString(String::formatted("%f", hh));
+    }
+    break;
+  case MainWindow::FILE_Recent1:
+    add_document(_settings->getValue("recent0"));
+    break;
+  case MainWindow::FILE_Recent2:
+    add_document(_settings->getValue("recent1"));
+    break;
+  case MainWindow::FILE_Recent3:
+    add_document(_settings->getValue("recent2"));
     break;
   case MainWindow::FILE_Exit:
     do_exit();
@@ -227,6 +278,10 @@ PopupMenu MainComponent::getMenuForIndex(int topLevelMenuIndex, const String &) 
     m.addCommandItem(commandManager, MainWindow::FILE_Save);
     m.addCommandItem(commandManager, MainWindow::FILE_SaveAs);
     m.addSeparator();
+    m.addCommandItem(commandManager, MainWindow::FILE_Recent1);
+    m.addCommandItem(commandManager, MainWindow::FILE_Recent2);
+    m.addCommandItem(commandManager, MainWindow::FILE_Recent3);
+    m.addSeparator();
     m.addCommandItem(commandManager, MainWindow::FILE_Exit);
     break;
   case 1:
@@ -262,26 +317,34 @@ MainComponent::OpenDocument* MainComponent::currentDoc() {
   return nullptr;
 }
 
-void MainComponent::add_document(const File& file)
+bool MainComponent::add_document(const File& file)
 {
+  if (!file.existsAsFile())
+    return false;
+
   // Is this file already open? Then just select it.
   int index = 0;
   for (OpenDocsList::iterator it = _opendocs.begin(); it != _opendocs.end(); ++it, ++index) {
     if ((*it)->file == file) {
       _tabs.setCurrentTabIndex(index);
-      return;
+      return false;
     }
   }
 
-  OpenDocument* doc = new OpenDocument(file);
+  OpenDocument* doc = new OpenDocument;
+  if (!doc->load(file)) {
+    delete doc;
+    return false;
+  }
+
   _opendocs.push_back(doc);
   
   doc->editor->setFont(*_editorFont);
-  doc->editor->setColourScheme(_editorColorScheme);
-  //doc->editor->setColour();
   _tabs.addTab(file.getFileName(), Colour(66, 67, 65), doc->editor, false);
   _tabs.setCurrentTabIndex(_tabs.getNumTabs() - 1);
   resized();
+
+  return true;
 }
 
 void MainComponent::do_exit()
@@ -341,7 +404,13 @@ void MainComponent::do_fileopen()
 #endif
 
   if (file.getFullPathName().length()) {
-    add_document(file);
-    _settings->setValue("last folder", file.getParentDirectory().getFullPathName());
+    if (add_document(file)) {
+      _settings->setValue("last folder", file.getParentDirectory().getFullPathName());
+
+      String name;
+      name << "recent" << _recentCounter;
+      _settings->setValue(name, file.getFullPathName());
+      _recentCounter = (_recentCounter + 1) % 3;
+    }
   }
 }

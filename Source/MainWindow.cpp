@@ -14,7 +14,9 @@ MainWindow::MainWindow(String name) : DocumentWindow(name,
   .findColour(ResizableWindow::backgroundColourId),
   DocumentWindow::allButtons)
 {
+  
   darkLookAndFeel = new EditorLookAndFeel;
+  setLookAndFeel(darkLookAndFeel);
   
   setUsingNativeTitleBar(true);
   mainComponent = new MainComponent();
