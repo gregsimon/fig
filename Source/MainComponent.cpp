@@ -42,9 +42,8 @@ int dataSize = 0;
   _menu = new MenuBarComponent(this);
   setApplicationCommandManagerToWatch(&MainWindow::getApplicationCommandManager());
 #if JUCE_MAC
-  MenuBarModel::setMacMainMenu(&_menuModel);
+  MenuBarModel::setMacMainMenu(this);
 #endif
-  //_menu.setModel(&_menuModel);
   addAndMakeVisible(_menu);
 
   // open document tabs
@@ -449,12 +448,10 @@ void MainComponent::do_fileopen()
   File file;
 #if JUCE_MAC
     FileChooser myChooser ("Select a file to edit",
-                           File::getSpecialLocation (File::userHomeDirectory),
+                           File(_settings->getValue("last folder")),
                            "*");
-    if (myChooser.browseForFileToOpen())
-    {
+    if (myChooser.browseForFileToOpen()) {
       file = myChooser.getResult();
-      
     }
 #else
   int dialog_flags = FileBrowserComponent::openMode | FileBrowserComponent::canSelectFiles;
