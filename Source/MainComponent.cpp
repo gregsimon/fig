@@ -97,8 +97,8 @@ void MainComponent::getAllCommands(Array< CommandID > &commands)
 
     MainWindow::VIEW_PrevDoc,
     MainWindow::VIEW_NextDoc,
-    //MainWindow::VIEW_TextLarger,
-    //MainWindow::VIEW_TextSmaller,
+    MainWindow::VIEW_TextLarger,
+    MainWindow::VIEW_TextSmaller,
 
 
     MainWindow::FILE_Exit
@@ -183,6 +183,14 @@ void MainComponent::getCommandInfo(CommandID commandID, ApplicationCommandInfo &
     result.setInfo("Focus Next Doc", "", generalCategory, 0);
     result.addDefaultKeypress(KeyPress::tabKey, ModifierKeys::ctrlModifier);
     break;
+  case MainWindow::VIEW_TextLarger:
+    result.setInfo("Make Text Larger", "", generalCategory, 0);
+    result.addDefaultKeypress('=', ModifierKeys::ctrlModifier);
+    break;
+  case MainWindow::VIEW_TextSmaller:
+    result.setInfo("Make Text Smaller", "", generalCategory, 0);
+    result.addDefaultKeypress('-', ModifierKeys::ctrlModifier);
+    break;
 
   default:
     return;
@@ -199,6 +207,10 @@ bool MainComponent::perform(const InvocationInfo &info)
     do_fileclose();
     break;
   case MainWindow::FILE_New:
+    break;
+  case MainWindow::FILE_Save:
+    break;
+  case MainWindow::VIEW_TextSmaller:
   {
     OpenDocument* doc = *_opendocs.begin();
     _editorFontSize -= .1f;
@@ -208,7 +220,7 @@ bool MainComponent::perform(const InvocationInfo &info)
     Logger::outputDebugString(String::formatted("%f", _editorFontSize));
   }
   break;
-  case MainWindow::FILE_Save:
+  case MainWindow::VIEW_TextLarger:
     {
       OpenDocument* doc = * _opendocs.begin();
       _editorFontSize += .1f;
@@ -321,6 +333,8 @@ PopupMenu MainComponent::getMenuForIndex(int topLevelMenuIndex, const String &) 
   case 2:
     m.addCommandItem(commandManager, MainWindow::VIEW_NextDoc);
     m.addCommandItem(commandManager, MainWindow::VIEW_PrevDoc);
+    m.addCommandItem(commandManager, MainWindow::VIEW_TextLarger);
+    m.addCommandItem(commandManager, MainWindow::VIEW_TextSmaller);
     break;
   }
 
