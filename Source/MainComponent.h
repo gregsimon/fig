@@ -9,6 +9,7 @@
 class MainComponent   : public Component, 
   public ChangeListener,
   public MenuBarModel,
+  public FindAndReplaceComponent::Listener,
   public ApplicationCommandTarget
 {
 public:
@@ -24,6 +25,9 @@ public:
   virtual void 	getAllCommands(Array< CommandID > &commands) override;
   virtual void 	getCommandInfo(CommandID commandID, ApplicationCommandInfo &result) override;
   virtual bool 	perform(const InvocationInfo &info) override;
+
+  // Find Panel
+  virtual void returnKeyPressed(const String&);
 
   // MenuBarModel
   virtual StringArray getMenuBarNames() override;

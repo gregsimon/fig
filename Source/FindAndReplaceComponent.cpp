@@ -14,6 +14,8 @@ FindAndReplaceComponent::FindAndReplaceComponent()
   _findText.setReturnKeyStartsNewLine(false);
   _findText.setScrollbarsShown(false);
   _findText.setSelectAllWhenFocused(true);
+
+  _findText.addListener(this);
 }
 
 FindAndReplaceComponent::~FindAndReplaceComponent()
@@ -22,6 +24,16 @@ FindAndReplaceComponent::~FindAndReplaceComponent()
 
 void FindAndReplaceComponent::focus() {
   _findText.toFront(true);
+}
+
+void FindAndReplaceComponent::textEditorReturnKeyPressed(TextEditor &)
+{
+  _listeners.call(&Listener::returnKeyPressed, _findText.getText());
+}
+
+void FindAndReplaceComponent::textEditorEscapeKeyPressed(TextEditor &)
+{
+
 }
 
 void FindAndReplaceComponent::paint (Graphics& ) { }

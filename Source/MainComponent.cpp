@@ -31,6 +31,7 @@ MainComponent::MainComponent()
   // find panel
   _findPanel = new FindAndReplaceComponent;
   addAndMakeVisible(_findPanel);
+  _findPanel->addListener(this);
   
   // set up tabs
   _tabs.setTabBarDepth(kTabHeaderHeight);
@@ -167,6 +168,10 @@ void MainComponent::changeListenerCallback(ChangeBroadcaster *) { }
 
 void MainComponent::do_find() {
   _findPanel->focus();
+}
+
+void MainComponent::returnKeyPressed(const String& findText) {
+  Logger::outputDebugString(findText);
 }
 
 void MainComponent::show_find_ui(bool show) {
