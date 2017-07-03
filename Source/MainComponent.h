@@ -83,11 +83,11 @@ private:
   PropertiesFile::Options _options;
   ApplicationProperties _applicationProperties;
   PropertiesFile* _settings;
-  
+    
   int _recentCounter = 0;
 
-  CodeEditorComponent::ColourScheme _editorColorScheme;
   ScopedPointer<Font> _editorFont;
+  float _editorFontSize = 17.7f;
   
   ScopedPointer<MenuBarComponent> _menu;
   

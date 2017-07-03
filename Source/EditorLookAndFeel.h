@@ -9,12 +9,15 @@ public:
     int dataSize = 0;
     const char* data = BinaryData::getNamedResource("InconsolataRegular_ttf", dataSize);
     font = new Font(Typeface::createSystemTypefaceFor(data, dataSize));
-    font->setHeight(16.9f);
+    font->setHeight(17.0f);
 
+    /*
+    setColour(CodeEditorComponent::defaultTextColourId, Colour(0xff, 0xff, 0x00));
     setColour(TextEditor::textColourId, Colour(0xF8, 0xF8, 0xF2));
     setColour(0x1004500, Colour(0x27, 0x28, 0x22)); // background color
     setColour(0x1004502, Colour(73, 72, 62)); // highlight color
     setColour(0x1004505, Colour(114, 144, 138)); // lineNumberTextId
+    */
   }
   Font getTextButtonFont(TextButton &, int) override { return *font; }
   Font getMenuBarFont(MenuBarComponent &, int, const String &) override { return *font; }

@@ -31,7 +31,7 @@ int dataSize = 0;
   const char* data = BinaryData::getNamedResource("InconsolataRegular_ttf", dataSize);
   Typeface::Ptr font_data = Typeface::createSystemTypefaceFor(data, dataSize);
   _editorFont = new Font(font_data);
-  _editorFont->setHeight(16.9f);
+  _editorFont->setHeight(_editorFontSize);
   
   
 
@@ -174,7 +174,6 @@ void MainComponent::getCommandInfo(CommandID commandID, ApplicationCommandInfo &
 
 bool MainComponent::perform(const InvocationInfo &info)
 {
-  static float hh = 11.0f;
   switch (info.commandID) {
   case MainWindow::FILE_Open:
     do_fileopen();
@@ -185,21 +184,21 @@ bool MainComponent::perform(const InvocationInfo &info)
   case MainWindow::FILE_New:
   {
     OpenDocument* doc = *_opendocs.begin();
-    hh -= .1f;
-    _editorFont->setHeight(hh);
+    _editorFontSize -= .1f;
+    _editorFont->setHeight(_editorFontSize);
     doc->editor->setFont(*_editorFont);
     doc->editor->repaint();
-    Logger::outputDebugString(String::formatted("%f", hh));
+    Logger::outputDebugString(String::formatted("%f", _editorFontSize));
   }
   break;
   case MainWindow::FILE_Save:
     {
       OpenDocument* doc = * _opendocs.begin();
-      hh += .1f;
-      _editorFont->setHeight(hh);
+      _editorFontSize += .1f;
+      _editorFont->setHeight(_editorFontSize);
       doc->editor->setFont(*_editorFont);
       doc->editor->repaint();
-      Logger::outputDebugString(String::formatted("%f", hh));
+      Logger::outputDebugString(String::formatted("%f", _editorFontSize));
     }
     break;
   case MainWindow::FILE_Recent1:
