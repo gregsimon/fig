@@ -92,7 +92,7 @@ private:
   int _recentCounter = 0;
 
   ScopedPointer<Font> _editorFont;
-  float _editorFontSize = 17.7f;
+  float _editorFontSize;
   
   ScopedPointer<MenuBarComponent> _menu;
   

@@ -8,15 +8,32 @@ public:
   EditorLookAndFeel() {
     int dataSize = 0;
     const char* data = BinaryData::getNamedResource("InconsolataRegular_ttf", dataSize);
-    font = new Font(Typeface::createSystemTypefaceFor(data, dataSize));
-    font->setHeight(18.0f);
+    if (data) {
+      font = new Font(Typeface::createSystemTypefaceFor(data, dataSize));
+      font->setHeight(14.0f);
+    }
+
+    data = BinaryData::getNamedResource("InconsolataBold_ttf", dataSize);
+    if (data) {
+      font_bold = new Font(Typeface::createSystemTypefaceFor(data, dataSize));
+      font_bold->setHeight(14.0f);
+    }
 
     setColour(0x1004502, Colour(73, 72, 62)); // highlight color
   }
   Font getTextButtonFont(TextButton &, int) override { return *font; }
-  Font getMenuBarFont(MenuBarComponent &, int, const String &) override { return *font; }
+  Font getMenuBarFont(MenuBarComponent &, int, const String &) override { return *font_bold; }
   Font getPopupMenuFont() override { return *font; }
   Font getLabelFont(Label &) override { return *font; }
+
+  int getTabButtonBestWidth (TabBarButton &button, int tabDepth) override {
+    TabbedButtonBar &bar = button.getTabbedButtonBar();
+    StringArray arr = bar.getTabNames();
+    String title = arr[button.getIndex()];
+
+    int width = font->getStringWidthFloat(title);
+    return width + (2*tab_padding);
+  }
 
   void 	drawTabButton(TabBarButton &b, Graphics &g, bool, bool) override {
     TabbedButtonBar &bar = b.getTabbedButtonBar();
@@ -45,5 +62,7 @@ public:
   }
 private:
   ScopedPointer<Font> font;
+  ScopedPointer<Font> font_bold;
+  const int tab_padding = 8;
 };
 

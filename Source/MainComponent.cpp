@@ -3,6 +3,8 @@
 #include "MainWindow.h"
 #include "MainComponent.h"
 
+const int kTabHeaderHeight = 22;
+
 
 MainComponent::MainComponent()
   : _tabs(TabbedButtonBar::Orientation::TabsAtTop)
@@ -18,6 +20,8 @@ MainComponent::MainComponent()
   _applicationProperties.setStorageParameters(_options);
   _settings = _applicationProperties.getUserSettings();
 
+  _editorFontSize = (float)_settings->getDoubleValue("editor_font_size", 16.5);
+
   int dataSize = 0;
   const char* data = BinaryData::getNamedResource("InconsolataRegular_ttf", dataSize);
   Typeface::Ptr font_data = Typeface::createSystemTypefaceFor(data, dataSize);
@@ -25,6 +29,8 @@ MainComponent::MainComponent()
   _editorFont->setHeight(_editorFontSize);
   
   
+  // set up tabs
+  _tabs.setTabBarDepth(kTabHeaderHeight);
 
   // set up commands
   // TODO
@@ -295,8 +301,14 @@ void MainComponent::paint (Graphics& )
 
 void MainComponent::resized()
 {
-  _menu->setBounds(0, 0, getWidth(), 24);
-  _tabs.setBounds(0, 24, getWidth(), getHeight()-48);
+#if JUCE_MAC
+  const int kMenuHeight = 0;
+#else
+  const int kMenuHeight = 24;
+#endif
+
+  _menu->setBounds(0, 0, getWidth(), kMenuHeight);
+  _tabs.setBounds(0, kMenuHeight, getWidth(), getHeight()-kMenuHeight);
 
   _settings->setValue("win_width", getWidth());
   _settings->setValue("win_height", getHeight());
