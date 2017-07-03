@@ -35,6 +35,14 @@ public:
     EDIT_Paste,
     EDIT_SelectAll,
 
+    VIEW_NextDoc,
+    VIEW_PrevDoc,
+    VIEW_TextLarger,
+    VIEW_TextSmaller,
+
+    PROJECT_New,
+
+    HELP_About,
 
     FILE_Exit
   };

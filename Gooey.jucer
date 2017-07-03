@@ -14,8 +14,8 @@
       <FILE id="lurBi4" name="MainWindow.h" compile="0" resource="0" file="Source/MainWindow.h"/>
       <FILE id="GBmci1" name="MainWindow.cpp" compile="1" resource="0" file="Source/MainWindow.cpp"/>
       <GROUP id="{F588E20D-136A-FD49-C2E4-2F34DC7DF488}" name="fonts">
-        <FILE id="XSyTxc" name="DejaVuSansMono.ttf" compile="0" resource="1"
-              file="fonts/DejaVuSansMono.ttf"/>
+        <FILE id="XzxwPL" name="Inconsolata-Bold.ttf" compile="0" resource="1"
+              file="fonts/Inconsolata-Bold.ttf"/>
         <FILE id="Kv6wpq" name="Inconsolata-Regular.ttf" compile="0" resource="1"
               file="fonts/Inconsolata-Regular.ttf"/>
       </GROUP>

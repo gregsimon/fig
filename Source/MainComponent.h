@@ -31,6 +31,8 @@ public:
   virtual PopupMenu getMenuForIndex(int topLevelMenuIndex, const String &) override;
   virtual void 	menuItemSelected(int /*menuItemID*/, int /*topLevelMenuIndex*/) override;
 
+  void show_next_tab();
+  void show_prev_tab();
   void do_fileopen();
   void do_fileclose();
   void do_exit();
@@ -59,6 +61,7 @@ private:
       String contents = f.loadFileAsString();
       editor->loadContent(contents);
       editor->setTabSize(2, true);
+      editor->setScrollbarThickness(12);
       return true;
     }
     ~OpenDocument() {

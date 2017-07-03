@@ -95,6 +95,12 @@ void MainComponent::getAllCommands(Array< CommandID > &commands)
     MainWindow::EDIT_Paste,
     MainWindow::EDIT_SelectAll,
 
+    MainWindow::VIEW_PrevDoc,
+    MainWindow::VIEW_NextDoc,
+    //MainWindow::VIEW_TextLarger,
+    //MainWindow::VIEW_TextSmaller,
+
+
     MainWindow::FILE_Exit
 
   };
@@ -167,6 +173,17 @@ void MainComponent::getCommandInfo(CommandID commandID, ApplicationCommandInfo &
     result.setInfo("Select All", "select all", generalCategory, 0);
     result.addDefaultKeypress('a', ModifierKeys::commandModifier);
     break;
+
+  // View
+  case MainWindow::VIEW_PrevDoc:
+    result.setInfo("Focus Previous Doc", "", generalCategory, 0);
+    result.addDefaultKeypress(KeyPress::tabKey, ModifierKeys::ctrlModifier| ModifierKeys::shiftModifier);
+    break;
+  case MainWindow::VIEW_NextDoc:
+    result.setInfo("Focus Next Doc", "", generalCategory, 0);
+    result.addDefaultKeypress(KeyPress::tabKey, ModifierKeys::ctrlModifier);
+    break;
+
   default:
     return;
   }
@@ -241,6 +258,13 @@ bool MainComponent::perform(const InvocationInfo &info)
       doc->editor->selectAll();
     }
     break;
+
+  case MainWindow::VIEW_NextDoc:
+    show_next_tab();
+    break;
+  case MainWindow::VIEW_PrevDoc:
+    show_prev_tab();
+    break;
   }
   return true;
 }
@@ -262,6 +286,7 @@ StringArray MainComponent::getMenuBarNames() {
   StringArray arr;
   arr.add("File");
   arr.add("Edit");
+  arr.add("View");
   return arr;
 }
 
@@ -293,6 +318,10 @@ PopupMenu MainComponent::getMenuForIndex(int topLevelMenuIndex, const String &) 
     m.addSeparator();
     m.addCommandItem(commandManager, MainWindow::EDIT_SelectAll);
     break;
+  case 2:
+    m.addCommandItem(commandManager, MainWindow::VIEW_NextDoc);
+    m.addCommandItem(commandManager, MainWindow::VIEW_PrevDoc);
+    break;
   }
 
   return m;
@@ -314,6 +343,32 @@ MainComponent::OpenDocument* MainComponent::currentDoc() {
   }
 
   return nullptr;
+}
+
+void MainComponent::show_next_tab()
+{
+  if (!_tabs.getNumTabs())
+    return;
+
+  int index = _tabs.getCurrentTabIndex();
+  index++;
+  if (index >= _tabs.getNumTabs())
+    index = 0;
+
+  _tabs.setCurrentTabIndex(index);
+}
+
+void MainComponent::show_prev_tab()
+{
+  if (!_tabs.getNumTabs())
+    return;
+
+  int index = _tabs.getCurrentTabIndex();
+  index--;
+  if (index < 0)
+    index = _tabs.getNumTabs() - 1;
+
+  _tabs.setCurrentTabIndex(index);
 }
 
 bool MainComponent::add_document(const File& file)

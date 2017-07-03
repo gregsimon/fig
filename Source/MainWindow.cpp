@@ -16,11 +16,10 @@ MainWindow::MainWindow(String name) : DocumentWindow(name,
 {
   
   darkLookAndFeel = new EditorLookAndFeel;
-  //setLookAndFeel(darkLookAndFeel);
   
   setUsingNativeTitleBar(true);
   mainComponent = new MainComponent();
-  //mainComponent->setLookAndFeel(darkLookAndFeel);
+  mainComponent->setLookAndFeel(darkLookAndFeel);
   setContentOwned(mainComponent, true);
 
   addKeyListener(getApplicationCommandManager().getKeyMappings());
