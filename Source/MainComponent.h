@@ -57,7 +57,7 @@ private:
       code_document = new CodeDocument;
       editor = new CodeEditorComponent(*code_document, tokenizer);
       String contents = f.loadFileAsString();
-      code_document->replaceAllContent(contents);
+      editor->loadContent(contents);
       editor->setTabSize(2, true);
       return true;
     }
