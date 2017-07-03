@@ -6,6 +6,12 @@
               jucerVersion="5.0.2">
   <MAINGROUP id="lajgul" name="Gooey">
     <GROUP id="{43400221-949D-1E05-4F19-06BCA9DA3D1E}" name="Source">
+      <FILE id="W1fJTn" name="MainComponentCommands.cpp" compile="1" resource="0"
+            file="Source/MainComponentCommands.cpp"/>
+      <FILE id="wrxTSP" name="FindAndReplaceComponent.cpp" compile="1" resource="0"
+            file="Source/FindAndReplaceComponent.cpp"/>
+      <FILE id="h1fI2D" name="FindAndReplaceComponent.h" compile="0" resource="0"
+            file="Source/FindAndReplaceComponent.h"/>
       <FILE id="ybD6hG" name="CustomCppTokenizer.h" compile="0" resource="0"
             file="Source/CustomCppTokenizer.h"/>
       <FILE id="Ht0Xxj" name="EditorLookAndFeel.h" compile="0" resource="0"

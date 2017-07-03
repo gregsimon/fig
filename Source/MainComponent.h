@@ -1,9 +1,8 @@
 #pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
-
 #include "CustomCppTokenizer.h"
-
+#include "FindAndReplaceComponent.h"
 #include <list>
 
 
@@ -36,6 +35,9 @@ public:
   void do_fileopen();
   void do_fileclose();
   void do_exit();
+
+  void do_find();
+  void show_find_ui(bool);
   
   bool add_document(const File& file);
   void save_open_file_positions();
@@ -95,6 +97,7 @@ private:
   float _editorFontSize;
   
   ScopedPointer<MenuBarComponent> _menu;
+  ScopedPointer<FindAndReplaceComponent> _findPanel;
   
   TabbedComponent _tabs;
 

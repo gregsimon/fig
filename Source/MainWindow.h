@@ -34,6 +34,7 @@ public:
     EDIT_Copy,
     EDIT_Paste,
     EDIT_SelectAll,
+    EDIT_Find,
 
     VIEW_NextDoc,
     VIEW_PrevDoc,
