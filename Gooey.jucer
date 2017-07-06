@@ -75,6 +75,20 @@
         <MODULEPATH id="juce_gui_extra" path="../JUCE/modules"/>
       </MODULEPATHS>
     </LINUX_MAKE>
+    <FUCHSIA_MAKE targetFolder="Builds/Fuchsia">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="Gooey"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="Gooey"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_gui_extra" path="/home/greg/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="/home/greg/JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="/home/greg/JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="/home/greg/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="/home/greg/JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="/home/greg/JUCE/modules"/>
+      </MODULEPATHS>
+    </FUCHSIA_MAKE>
   </EXPORTFORMATS>
   <MODULES>
     <MODULE id="juce_core" showAllCode="1" useLocalCopy="0"/>
