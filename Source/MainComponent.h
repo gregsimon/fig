@@ -27,7 +27,7 @@ public:
   virtual bool 	perform(const InvocationInfo &info) override;
 
   // Find Panel
-  virtual void returnKeyPressed(const String&);
+  virtual void returnKeyPressed(const String&) override;
 
   // MenuBarModel
   virtual StringArray getMenuBarNames() override;

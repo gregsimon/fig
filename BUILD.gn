@@ -2,16 +2,23 @@
 # Copyright 2017 Greg Simon
 
 import("//magma/gnbuild/magma.gni")
+import("//build/toolchain/shared.gni")
+import("//packages/package.gni")
 
 executable("gooey") {
   include_dirs = [ 
     ".", 
     "Source" ,
     "JuceLibraryCode",
+
+    # TODO : change this to a JUCE dependency or
+    # just include the files in the project.
     "/home/greg/JUCE/modules"
   ]
 
-  defines = [ "FUCHSIA", 
+  defines = [ 
+    "FUCHSIA", 
+    "JUCE_64BIT",
     "JUCE_APP_VERSION=1.0.0",
     "DEBUG=1",
     "JUCE_APP_VERSION_HEX=0x10000",
@@ -42,7 +49,10 @@ executable("gooey") {
 
   ]
 
-  configs -=  [ "//build/config:no_exceptions" ]
+  configs -= [ "//build/config:no_exceptions" ]
+  configs -= [ "//build/config:no_rtti" ]
+
+  # cflags_c += [ "-std=c++11" ]
 
   deps = [
   ]
