@@ -6,6 +6,10 @@
               jucerVersion="5.0.2">
   <MAINGROUP id="lajgul" name="Gooey">
     <GROUP id="{43400221-949D-1E05-4F19-06BCA9DA3D1E}" name="Source">
+      <FILE id="Exl0XU" name="CustomFileBrowser.cpp" compile="1" resource="0"
+            file="Source/CustomFileBrowser.cpp"/>
+      <FILE id="UAb82B" name="CustomFileBrowser.h" compile="0" resource="0"
+            file="Source/CustomFileBrowser.h"/>
       <FILE id="W1fJTn" name="MainComponentCommands.cpp" compile="1" resource="0"
             file="Source/MainComponentCommands.cpp"/>
       <FILE id="wrxTSP" name="FindAndReplaceComponent.cpp" compile="1" resource="0"

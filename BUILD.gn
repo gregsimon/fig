@@ -37,6 +37,7 @@ executable("gooey") {
     "Source/FindAndReplaceComponent.cpp",
     "Source/MainComponentCommands.cpp",
     "Source/MainComponent.cpp",
+    "Source/CustomFileBrowser.cpp",
     "Source/MainWindow.cpp",
 
     "JuceLibraryCode/BinaryData.cpp",

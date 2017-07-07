@@ -1,14 +1,18 @@
 #pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
+
 #include "CustomCppTokenizer.h"
 #include "FindAndReplaceComponent.h"
+#include "CustomFileBrowser.h"
+
 #include <list>
 
 
 class MainComponent   : public Component, 
   public ChangeListener,
   public MenuBarModel,
+  public CustomFileBrowser::Listener,
   public FindAndReplaceComponent::Listener,
   public ApplicationCommandTarget
 {
@@ -25,6 +29,10 @@ public:
   virtual void 	getAllCommands(Array< CommandID > &commands) override;
   virtual void 	getCommandInfo(CommandID commandID, ApplicationCommandInfo &result) override;
   virtual bool 	perform(const InvocationInfo &info) override;
+
+  // CustomFileBrowser
+  virtual void fileSelected(const File&) override;
+  virtual void cancelled() override;
 
   // Find Panel
   virtual void returnKeyPressed(const String&) override;
@@ -104,9 +112,7 @@ private:
   ScopedPointer<FindAndReplaceComponent> _findPanel;
 
   // File browsing
-  ScopedPointer<WildcardFileFilter> _fileFilter;
-  ScopedPointer<FileBrowserComponent> _fileBrowser;
-  ScopedPointer<FileChooserDialogBox> _fileDialogBox;
+  ScopedPointer<CustomFileBrowser> _fileBrowser;
 
   TabbedComponent _tabs;
 

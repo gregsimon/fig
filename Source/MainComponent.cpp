@@ -304,26 +304,18 @@ void MainComponent::do_fileopen()
       file = myChooser.getResult();
     }
 #else
-  int dialog_flags = FileBrowserComponent::openMode | FileBrowserComponent::canSelectFiles;
-  _fileFilter = new WildcardFileFilter("*.cpp;*.h;*.cc;*.hpp;*.c;*.dart;*.lua;*.txt;*.gn;*.gni;", 
-    "*", String());
   
-  _fileBrowser = new FileBrowserComponent(dialog_flags, _settings->getValue("last folder"), 
-    _fileFilter.get(), nullptr);
-  //addChildComponent(_fileBrowser, -1);
-  //resized();
-
-  _fileDialogBox = new FileChooserDialogBox("Select a file to edit", String(),
-    *_fileBrowser, false, _fileBrowser->findColour(AlertWindow::backgroundColourId));
-
-  _fileDialogBox->setVisible(true);
-  _fileDialogBox->enterModalState();
-  // TODO
-  //if (dialog.show()) {
-  //  file = browserComponent.getSelectedFile(0);
-  //}
+  _fileBrowser = new CustomFileBrowser(_settings->getValue("last folder"), 
+                CustomFileBrowser::open);
+  _fileBrowser->addListener(this);
+  addChildComponent(_fileBrowser, -1);
+  _fileBrowser->setVisible(true);
+  resized();
 #endif
+}
 
+void MainComponent::fileSelected(const File& file)
+{
   if (file.getFullPathName().length()) {
     if (add_document(file)) {
       _settings->setValue("last folder", file.getParentDirectory().getFullPathName());
@@ -334,4 +326,16 @@ void MainComponent::do_fileopen()
       _recentCounter = (_recentCounter + 1) % 3;
     }
   }
+
+  _fileBrowser->removeListener(this);
+  removeChildComponent(_fileBrowser);
+  delete (_fileBrowser.release());
+}
+
+void MainComponent::cancelled()
+{
+  _fileBrowser->removeListener(this);
+  removeChildComponent(_fileBrowser);
+  delete (_fileBrowser.release());
+  resized();
 }
