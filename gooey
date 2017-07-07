@@ -1,0 +1,13 @@
+{
+    "imports": [
+    ],
+    "binaries": [
+    {
+        "binary": "gooey",
+        "bootfs_path": "apps/gooey"
+    }
+    ],
+    "packages": {
+        "gooey": "//third_party/gooey"
+    }
+}
