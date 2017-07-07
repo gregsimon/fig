@@ -310,9 +310,10 @@ void MainComponent::do_fileopen()
 
   FileChooserDialogBox dialog("Select a file to edit", String(),
     browserComponent, false, browserComponent.findColour(AlertWindow::backgroundColourId));
-  if (dialog.show()) {
-    file = browserComponent.getSelectedFile(0);
-  }
+  // TODO
+  //if (dialog.show()) {
+  //  file = browserComponent.getSelectedFile(0);
+  //}
 #endif
 
   if (file.getFullPathName().length()) {
