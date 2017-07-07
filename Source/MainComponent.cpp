@@ -108,7 +108,10 @@ void MainComponent::resized()
       getWidth(), find_panel_height);
   }
   
-
+  if (_fileBrowser) {
+    _fileBrowser->setBounds(0, 0, getWidth(), getHeight());
+  }
+  
   // save the outer window size.
   _settings->setValue("win_width", getWidth());
   _settings->setValue("win_height", getHeight());
@@ -302,14 +305,19 @@ void MainComponent::do_fileopen()
     }
 #else
   int dialog_flags = FileBrowserComponent::openMode | FileBrowserComponent::canSelectFiles;
-  WildcardFileFilter wildcard("*.cpp;*.h;*.cc;*.hpp;*.c;*.dart;*.lua;*.txt;*.gn;*.gni;", "*", String());
-  String startingFile;
+  _fileFilter = new WildcardFileFilter("*.cpp;*.h;*.cc;*.hpp;*.c;*.dart;*.lua;*.txt;*.gn;*.gni;", 
+    "*", String());
   
-  FileBrowserComponent browserComponent(dialog_flags, _settings->getValue("last folder"), 
-    &wildcard, nullptr);
+  _fileBrowser = new FileBrowserComponent(dialog_flags, _settings->getValue("last folder"), 
+    _fileFilter.get(), nullptr);
+  //addChildComponent(_fileBrowser, -1);
+  //resized();
 
-  FileChooserDialogBox dialog("Select a file to edit", String(),
-    browserComponent, false, browserComponent.findColour(AlertWindow::backgroundColourId));
+  _fileDialogBox = new FileChooserDialogBox("Select a file to edit", String(),
+    *_fileBrowser, false, _fileBrowser->findColour(AlertWindow::backgroundColourId));
+
+  _fileDialogBox->setVisible(true);
+  _fileDialogBox->enterModalState();
   // TODO
   //if (dialog.show()) {
   //  file = browserComponent.getSelectedFile(0);

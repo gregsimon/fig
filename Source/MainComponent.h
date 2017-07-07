@@ -102,7 +102,12 @@ private:
   
   ScopedPointer<MenuBarComponent> _menu;
   ScopedPointer<FindAndReplaceComponent> _findPanel;
-  
+
+  // File browsing
+  ScopedPointer<WildcardFileFilter> _fileFilter;
+  ScopedPointer<FileBrowserComponent> _fileBrowser;
+  ScopedPointer<FileChooserDialogBox> _fileDialogBox;
+
   TabbedComponent _tabs;
 
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
