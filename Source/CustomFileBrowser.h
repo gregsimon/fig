@@ -39,7 +39,7 @@ public:
   virtual void  browserRootChanged (const File &newRoot) override { }
 
   // ButtonListener
-  virtual void  buttonClicked (Button *);
+  virtual void  buttonClicked (Button *) override;
 
 private:
     ScopedPointer<FileBrowserComponent> _browser;

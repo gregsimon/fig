@@ -13,7 +13,7 @@ executable("gooey") {
 
     # TODO : change this to a JUCE dependency or
     # just include the files in the project.
-    "/home/greg/JUCE/modules"
+    getenv("HOME") + "/JUCE/modules"
   ]
 
   defines = [ 
