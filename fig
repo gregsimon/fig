@@ -1,0 +1,13 @@
+{
+    "imports": [
+    ],
+    "binaries": [
+    {
+        "binary": "fig",
+        "bootfs_path": "apps/fig"
+    }
+    ],
+    "packages": {
+        "fig": "//third_party/fig"
+    }
+}

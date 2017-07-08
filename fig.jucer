@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="a8mkg7" name="Gooey" displaySplashScreen="1" reportAppUsage="1"
+<JUCERPROJECT id="a8mkg7" name="fig" displaySplashScreen="1" reportAppUsage="1"
               splashScreenColour="Dark" projectType="guiapp" version="1.0.0"
               bundleIdentifier="com.yourcompany.Gooey" includeBinaryInAppConfig="1"
               jucerVersion="5.0.2">
-  <MAINGROUP id="lajgul" name="Gooey">
+  <MAINGROUP id="lajgul" name="fig">
     <GROUP id="{43400221-949D-1E05-4F19-06BCA9DA3D1E}" name="Source">
       <FILE id="Exl0XU" name="CustomFileBrowser.cpp" compile="1" resource="0"
             file="Source/CustomFileBrowser.cpp"/>
@@ -71,12 +71,12 @@
         <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="Gooey"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_core" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_events" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_graphics" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_data_structures" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_gui_basics" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_gui_extra" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="~/JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="~/JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="~/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="~/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="~/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="~/JUCE/modules"/>
       </MODULEPATHS>
     </LINUX_MAKE>
     <FUCHSIA_MAKE targetFolder="Builds/Fuchsia">

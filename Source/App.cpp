@@ -3,10 +3,10 @@
 #include "MainWindow.h"
 
 
-class GooeyApplication : public JUCEApplication
+class FigApplication : public JUCEApplication
 {
 public:
-  GooeyApplication() {}
+  FigApplication() {}
 
   const String getApplicationName() override { return ProjectInfo::projectName; }
   const String getApplicationVersion() override { return ProjectInfo::versionString; }
@@ -48,4 +48,4 @@ private:
 
 
 // This macro generates the main() routine that launches the app.
-START_JUCE_APPLICATION(GooeyApplication)
+START_JUCE_APPLICATION(FigApplication)

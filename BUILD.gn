@@ -1,11 +1,20 @@
-
 # Copyright 2017 Greg Simon
 
-import("//magma/gnbuild/magma.gni")
-import("//build/toolchain/shared.gni")
-import("//packages/package.gni")
-
 executable("gooey") {
+
+  deps = [
+    "//application/lib/app",
+    "//apps/icu_data/lib",
+    "//apps/modular/services/module",
+    "//apps/modular/services/story",
+    "//apps/mozart/lib/view_framework:view_provider",
+    "//apps/mozart/services/geometry",
+    "//apps/mozart/services/views",
+    "//lib/ftl",
+    "//lib/mtl",
+    "//third_party/boringssl",
+  ]
+
   include_dirs = [ 
     ".", 
     "Source" ,
@@ -54,8 +63,4 @@ executable("gooey") {
   configs -= [ "//build/config:no_rtti" ]
 
   # cflags_c += [ "-std=c++11" ]
-
-  deps = [
-  ]
-
 }
