@@ -1,6 +1,6 @@
 # Copyright 2017 Greg Simon
 
-executable("gooey") {
+executable("fig") {
 
   deps = [
     "//application/lib/app",
@@ -14,6 +14,8 @@ executable("gooey") {
     "//lib/mtl",
     "//third_party/boringssl",
   ]
+
+  ldflags = [ "-Wl,-z,-frtti" ]
 
   include_dirs = [ 
     ".", 
@@ -61,6 +63,4 @@ executable("gooey") {
 
   configs -= [ "//build/config:no_exceptions" ]
   configs -= [ "//build/config:no_rtti" ]
-
-  # cflags_c += [ "-std=c++11" ]
 }

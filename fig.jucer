@@ -2,7 +2,7 @@
 
 <JUCERPROJECT id="a8mkg7" name="fig" displaySplashScreen="1" reportAppUsage="1"
               splashScreenColour="Dark" projectType="guiapp" version="1.0.0"
-              bundleIdentifier="com.yourcompany.Gooey" includeBinaryInAppConfig="1"
+              bundleIdentifier="com.yourcompany.fig" includeBinaryInAppConfig="1"
               jucerVersion="5.0.2">
   <MAINGROUP id="lajgul" name="fig">
     <GROUP id="{43400221-949D-1E05-4F19-06BCA9DA3D1E}" name="Source">
@@ -52,9 +52,9 @@
     <VS2017 targetFolder="Builds/VisualStudio2017">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="x64"
-                       isDebug="1" optimisation="1" targetName="Gooey"/>
+                       isDebug="1" optimisation="1" targetName="fig"/>
         <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="x64"
-                       isDebug="0" optimisation="3" targetName="Gooey"/>
+                       isDebug="0" optimisation="3" targetName="fig"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_core" path="../../juce-huckleberry-windows/JUCE/modules"/>
@@ -67,8 +67,8 @@
     </VS2017>
     <LINUX_MAKE targetFolder="Builds/LinuxMakefile">
       <CONFIGURATIONS>
-        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="Gooey"/>
-        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="Gooey"/>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="fig"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="fig"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_core" path="~/JUCE/modules"/>
@@ -81,8 +81,8 @@
     </LINUX_MAKE>
     <FUCHSIA_MAKE targetFolder="Builds/Fuchsia">
       <CONFIGURATIONS>
-        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="Gooey"/>
-        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="Gooey"/>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="fig"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="fig"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_gui_extra" path="/home/greg/JUCE/modules"/>
