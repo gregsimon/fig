@@ -85,12 +85,12 @@
         <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="fig"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_gui_extra" path="/home/greg/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_basics" path="/home/greg/JUCE/modules"/>
-        <MODULEPATH id="juce_graphics" path="/home/greg/JUCE/modules"/>
-        <MODULEPATH id="juce_events" path="/home/greg/JUCE/modules"/>
-        <MODULEPATH id="juce_data_structures" path="/home/greg/JUCE/modules"/>
-        <MODULEPATH id="juce_core" path="/home/greg/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../../JUCE/modules"/>
       </MODULEPATHS>
     </FUCHSIA_MAKE>
   </EXPORTFORMATS>
