@@ -15,6 +15,7 @@ public:
   //==============================================================================
   void initialise(const String& /*commandLine*/) override
   {
+    printf("%s\n", __PRETTY_FUNCTION__);
     
     // This method is where you should put your application's initialisation code.
     mainWindow = new MainWindow(getApplicationName());

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="a8mkg7" name="fig" displaySplashScreen="1" reportAppUsage="1"
+<JUCERPROJECT id="a8mkg7" name="fig" displaySplashScreen="0" reportAppUsage="0"
               splashScreenColour="Dark" projectType="guiapp" version="1.0.0"
               bundleIdentifier="com.yourcompany.fig" includeBinaryInAppConfig="1"
               jucerVersion="5.0.2">

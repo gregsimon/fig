@@ -15,7 +15,7 @@ executable("fig") {
     "//third_party/boringssl",
   ]
 
-  ldflags = [ "-Wl,-z,-frtti" ]
+  # ldflags = [ "-Wl,-z,-frtti" ]
 
   include_dirs = [ 
     ".", 

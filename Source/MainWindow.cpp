@@ -14,6 +14,7 @@ MainWindow::MainWindow(String name) : DocumentWindow(name,
   .findColour(ResizableWindow::backgroundColourId),
   DocumentWindow::allButtons)
 {
+  printf("%s\n", __PRETTY_FUNCTION__);
   
   darkLookAndFeel = new EditorLookAndFeel;
   
