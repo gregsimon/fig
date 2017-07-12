@@ -13,6 +13,7 @@ executable("fig") {
     "//lib/ftl",
     "//lib/mtl",
     "//third_party/boringssl",
+    "//third_party/freetype2",
   ]
 
   # ldflags = [ "-Wl,-z,-frtti" ]
